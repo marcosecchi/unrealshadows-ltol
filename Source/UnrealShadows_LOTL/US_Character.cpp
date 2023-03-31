@@ -44,12 +44,13 @@ AUS_Character::AUS_Character()
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 }
 
+// Handle the movement input
 void AUS_Character::Move(const FInputActionValue& Value)
 {
 	const auto MovementVector = Value.Get<FVector2D>();
-	if(IsLocallyControlled())
-		GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Yellow, FString::Printf(TEXT("MovementVector: %s"), *MovementVector.ToString()));
+//	GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Yellow, FString::Printf(TEXT("MovementVector: %s"), *MovementVector.ToString()));
 
+	// Only add movement if there is a controller possessing this actor
 	if (Controller != nullptr)
 	{
 		const auto Rotation = Controller->GetControlRotation();
@@ -63,11 +64,13 @@ void AUS_Character::Move(const FInputActionValue& Value)
 	}
 }
 
+// Handle the look around input
 void AUS_Character::Look(const FInputActionValue& Value)
 {
 	const auto LookAxisVector = Value.Get<FVector2D>();
-	GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green, FString::Printf(TEXT("LookAxisVector: %s"), *LookAxisVector.ToString()));
+//	GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green, FString::Printf(TEXT("LookAxisVector: %s"), *LookAxisVector.ToString()));
 
+	// Only add look around if there is a controller possessing this actor
 	if (Controller != nullptr)
 	{
 		AddControllerYawInput(LookAxisVector.X);
@@ -75,15 +78,17 @@ void AUS_Character::Look(const FInputActionValue& Value)
 	}
 }
 
+// Handle the change of speed when the sprint button is pressed
 void AUS_Character::SprintStart(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Blue, TEXT("SprintStart"));
+//	GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Blue, TEXT("SprintStart"));
 	GetCharacterMovement()->MaxWalkSpeed = 3000.f;
 }
 
+// Handle the change of speed when the sprint button is released
 void AUS_Character::SprintEnd(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Blue, TEXT("SprintEnd"));
+//	GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Blue, TEXT("SprintEnd"));
 	GetCharacterMovement()->MaxWalkSpeed = 500.f;
 }
 
@@ -113,6 +118,7 @@ void AUS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	// Bind the each input action to the corresponding methods
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AUS_Character::Move);
