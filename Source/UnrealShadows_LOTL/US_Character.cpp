@@ -94,7 +94,7 @@ void AUS_Character::SprintEnd(const FInputActionValue& Value)
 
 void AUS_Character::Interact(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Red, TEXT("Interact"));
+//	GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Red, TEXT("Interact"));
 }
 
 void AUS_Character::BeginPlay()
@@ -127,6 +127,5 @@ void AUS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &AUS_Character::SprintStart);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AUS_Character::SprintEnd);
 	}
-
 }
 
