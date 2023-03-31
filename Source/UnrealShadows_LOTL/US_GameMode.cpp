@@ -11,6 +11,7 @@
 
 AUS_GameMode::AUS_GameMode()
 {
+	// Declare all the Gameplay Framework classes we want to use
 	GameStateClass = AUS_GameState::StaticClass();
 	PlayerStateClass = AUS_PlayerState::StaticClass();
 	PlayerControllerClass = AUS_PlayerController::StaticClass();
