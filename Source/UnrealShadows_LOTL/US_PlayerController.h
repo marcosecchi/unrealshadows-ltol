@@ -13,5 +13,4 @@ UCLASS()
 class UNREALSHADOWS_LOTL_API AUS_PlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
 };
