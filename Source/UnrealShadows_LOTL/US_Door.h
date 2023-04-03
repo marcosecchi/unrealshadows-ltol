@@ -16,7 +16,16 @@ class UNREALSHADOWS_LOTL_API AUS_Door : public AActor, public IUS_InteractableIn
 	TObjectPtr<class UBoxComponent> BoxCollision;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UStaticMeshComponent> Mesh;
+	TObjectPtr<UStaticMeshComponent> DoorMesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UStaticMeshComponent> IconMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Materials", meta = (AllowPrivateAccess = "true"))
+	UMaterialInterface* IconInteractMaterial;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Materials", meta = (AllowPrivateAccess = "true"))
+	UMaterialInterface* IconBaseMaterial;
 
 public:	
 	// Sets default values for this actor's properties
@@ -26,17 +35,26 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
 public:	
 	// Called every frame
 //	virtual void Tick(float DeltaTime) override;
 
 	// Getters for the door components
-	
-	/** Returns the SpringArmComponent used to connect the Camera to the character Capsule component. */
+
+	/** Returns the BoxCollision used as a trigger for the character. */
 	FORCEINLINE UBoxComponent* GetBoxCollision() const { return BoxCollision; }
 
-	/** Returns the CameraComponent used as a main camera for the character. */
-	FORCEINLINE UStaticMeshComponent* GetMesh() const { return Mesh; }
+	/** Returns the StaticMeshComponent used to display the door. */
+	FORCEINLINE UStaticMeshComponent* GetDoorMesh() const { return DoorMesh; }
+
+	/** Returns the StaticMeshComponent used to display the character interaction result. */
+	FORCEINLINE UStaticMeshComponent* GetIconMesh() const { return IconMesh; }
 
 	// US_InteractableInterface implementation
 	

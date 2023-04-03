@@ -3,6 +3,7 @@
 
 #include "US_Door.h"
 
+#include "US_Character.h"
 #include "Components/BoxComponent.h"
 
 // Sets default values
@@ -13,18 +14,29 @@ AUS_Door::AUS_Door()
 	
 	BoxCollision = CreateDefaultSubobject<UBoxComponent>("BoxCollision");
 	RootComponent = BoxCollision;
-	BoxCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+//	BoxCollision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	BoxCollision->SetGenerateOverlapEvents(true);
 	BoxCollision->SetBoxExtent(FVector(400, 400, 250));
 
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
-	Mesh->SetupAttachment(BoxCollision);
-	Mesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	DoorMesh = CreateDefaultSubobject<UStaticMeshComponent>("Door Mesh");
+	DoorMesh->SetupAttachment(BoxCollision);
+	DoorMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Game/KayKit/DungeonElements/door"));
 	if (MeshAsset.Succeeded())
 	{
-		GetMesh()->SetStaticMesh(MeshAsset.Object);
-		const auto Offset = Mesh->GetStaticMesh()->GetBoundingBox().GetSize().Y / 2;
-		Mesh->SetRelativeLocation(FVector(0.0f, -Offset, 0.0f));
+		DoorMesh->SetStaticMesh(MeshAsset.Object);
+		const auto HorizontalOffset = DoorMesh->GetStaticMesh()->GetBoundingBox().GetSize().Y / 2;
+		DoorMesh->SetRelativeLocation(FVector(0.0f, HorizontalOffset, 0.0f));
+	}
+
+	IconMesh = CreateDefaultSubobject<UStaticMeshComponent>("Icon Mesh");
+	IconMesh->SetupAttachment(BoxCollision);
+	IconMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> IconMeshAsset(TEXT("/Game/KayKit/DungeonElements/coin"));
+	if (IconMeshAsset.Succeeded())
+	{
+		IconMesh->SetStaticMesh(IconMeshAsset.Object);
+		IconMesh->SetRelativeLocation(FVector(100.0f, 0.0f, 300.0f));
 	}
 
 	bReplicates = true;
@@ -34,7 +46,53 @@ AUS_Door::AUS_Door()
 void AUS_Door::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Add actor begin overlap event
+	BoxCollision->OnComponentBeginOverlap.AddDynamic(this, &AUS_Door::OnBeginOverlap);
+	BoxCollision->OnComponentEndOverlap.AddDynamic(this, &AUS_Door::OnEndOverlap);
 	
+	if(IconMesh)
+	{
+		IconBaseMaterial = IconMesh->GetMaterial(0);
+	}
+}
+
+void AUS_Door::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor->IsA(ACharacter::StaticClass()))
+	{
+		const auto Character = Cast<ACharacter>(OtherActor);
+		if (Character)
+		{
+			// Print message on screen
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap!"));
+			
+			if (Execute_CanInteract(this, Character) && IconInteractMaterial)
+			{
+				IconMesh->SetMaterial(0, IconInteractMaterial);
+			}
+		}
+	}
+}
+
+void AUS_Door::OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (OtherActor->IsA(ACharacter::StaticClass()))
+	{
+		const auto Character = Cast<ACharacter>(OtherActor);
+		if (Character)
+		{
+			// Print message on screen
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Overlap End!"));
+			
+			if(IconBaseMaterial)
+				IconMesh->SetMaterial(0, IconBaseMaterial);
+		}
+		
+	}
+
 }
 
 // Called every frame
