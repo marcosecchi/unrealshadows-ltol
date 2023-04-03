@@ -25,15 +25,9 @@ void AUS_BasePickup::BeginPlay()
 	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AUS_BasePickup::OnBeginOverlap);
 }
 
-void AUS_BasePickup::Pickup_Implementation(AActor* NewOwner)
-{
-	SetOwner(NewOwner);
-}
-
 void AUS_BasePickup::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
                                     UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-//	return;
 	if (OtherActor->IsA(AUS_Character::StaticClass()))
 	{
 		const auto Character = Cast<AUS_Character>(OtherActor);
@@ -43,7 +37,11 @@ void AUS_BasePickup::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
 			Pickup(OtherActor);
 		}
 	}
+}
 
+void AUS_BasePickup::Pickup_Implementation(AActor* NewOwner)
+{
+	SetOwner(NewOwner);
 }
 
 // Called every frame

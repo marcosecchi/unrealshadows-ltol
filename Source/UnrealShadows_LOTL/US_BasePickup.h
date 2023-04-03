@@ -23,13 +23,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Pickup", meta=(DisplayName="Pickup"))
 	void Pickup(AActor* NewOwner);
 
 	void Pickup_Implementation(AActor* NewOwner);
 
-	UFUNCTION()
-	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 public:	
 	// Called every frame
@@ -37,5 +38,8 @@ public:
 
 	/** Returns the BoxCollision used as a trigger for the character. */
 	FORCEINLINE USphereComponent* GetSphereCollision() const { return SphereCollision; }
+
+	/** Returns the Static Mesh. */
+	FORCEINLINE UStaticMeshComponent* GetMesh() const { return Mesh; }
 
 };
