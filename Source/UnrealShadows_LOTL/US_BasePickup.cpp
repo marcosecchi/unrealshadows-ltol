@@ -5,8 +5,6 @@
 
 AUS_BasePickup::AUS_BasePickup()
 {
-//	PrimaryActorTick.bCanEverTick = true;
-
 	SphereCollision = CreateDefaultSubobject<USphereComponent>("Collision");
 	RootComponent = SphereCollision;
 	SphereCollision->SetGenerateOverlapEvents(true);
@@ -15,6 +13,8 @@ AUS_BasePickup::AUS_BasePickup()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 	Mesh->SetupAttachment(SphereCollision);
 	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	bReplicates = true;
 }
 
 // Called when the game starts or when spawned
@@ -25,6 +25,7 @@ void AUS_BasePickup::BeginPlay()
 	SphereCollision->OnComponentBeginOverlap.AddDynamic(this, &AUS_BasePickup::OnBeginOverlap);
 }
 
+// Handles the Character overlapping the pickup.
 void AUS_BasePickup::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
                                     UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
@@ -33,21 +34,14 @@ void AUS_BasePickup::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		const auto Character = Cast<AUS_Character>(OtherActor);
 		if (Character)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Pickup!"));
 			Pickup(OtherActor);
 		}
 	}
 }
 
+// Called when the pickup is picked up.
 void AUS_BasePickup::Pickup_Implementation(AActor* NewOwner)
 {
 	SetOwner(NewOwner);
 }
-
-// Called every frame
-//void ABasePickup::Tick(float DeltaTime)
-//{
-//	Super::Tick(DeltaTime);
-
-//}
 
