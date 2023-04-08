@@ -14,11 +14,19 @@ void AUS_PlayerState::AddXp(const int32 Value)
 	Xp += Value;
 	OnXpChanged.Broadcast(this, Xp);
 
+	GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Yellow, FString::Printf(TEXT("Total Xp: %d"), Xp));
+	
+	
+	
+	
 	const auto Character = Cast<AUS_Character>(GetPawn());
 	if (Character)
 	{
 		if(Character->GetCharacterStats()->NextLevelXp < Xp)
 		{
+			GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Red, TEXT("Level Up"));
+			
+			
 			LevelXp++;
 			OnLevelXpUp.Broadcast(this, LevelXp);
 		}
