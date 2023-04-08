@@ -7,7 +7,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "Kismet/GameplayStatics.h"
+#include "US_CharacterStats.h"
+#include "Engine/DataTable.h"
 
 AUS_Character::AUS_Character()
 {
@@ -84,14 +85,18 @@ void AUS_Character::Look(const FInputActionValue& Value)
 void AUS_Character::SprintStart(const FInputActionValue& Value)
 {
 //	GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Blue, TEXT("SprintStart"));
+	/********** CHANGE THIS **********/
 	GetCharacterMovement()->MaxWalkSpeed = 3000.f;
+	GetCharacterMovement()->MaxWalkSpeed = CharacterStats->SprintSpeed;
 }
 
 // Handle the change of speed when the sprint button is released
 void AUS_Character::SprintEnd(const FInputActionValue& Value)
 {
 //	GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Blue, TEXT("SprintEnd"));
+	/********** CHANGE THIS **********/
 	GetCharacterMovement()->MaxWalkSpeed = 500.f;
+	GetCharacterMovement()->MaxWalkSpeed = CharacterStats->WalkSpeed;
 }
 
 void AUS_Character::Interact(const FInputActionValue& Value)
@@ -112,6 +117,11 @@ void AUS_Character::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
+	TArray<FUS_CharacterStats*> CharacterStatsRows;
+	CharacterDataTable->GetAllRows<FUS_CharacterStats>(TEXT("US_Character"), CharacterStatsRows);
+
+	CharacterStats = CharacterStatsRows[0];
 }
 
 

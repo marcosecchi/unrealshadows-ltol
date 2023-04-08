@@ -43,6 +43,13 @@ class UNREALSHADOWS_LOTL_API AUS_Character : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	UInputAction* InteractAction;
 
+	/********************** ADD **********************/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Data", meta = (AllowPrivateAccess = "true"))
+	class UDataTable* CharacterDataTable;
+
+	struct FUS_CharacterStats* CharacterStats;
+	/********************** END ADD **********************/
+	
 public:
 	AUS_Character();
 
@@ -76,5 +83,10 @@ public:
 
 	/** Returns the CameraComponent used as a main camera for the character. */
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	/********************** ADD **********************/
+	/** Returns the default input mapping context for the character. */
+	FORCEINLINE FUS_CharacterStats* GetCharacterStats() const { return CharacterStats; }
+	/********************** END **********************/
 
 };
