@@ -34,14 +34,14 @@ void AUS_BasePickup::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		const auto Character = Cast<AUS_Character>(OtherActor);
 		if (Character)
 		{
-			Pickup(OtherActor);
+			Pickup(Character);
 		}
 	}
 }
 
 // Called when the pickup is picked up.
-void AUS_BasePickup::Pickup_Implementation(AActor* NewOwner)
+void AUS_BasePickup::Pickup_Implementation(AUS_Character* OwningCharacter)
 {
-	SetOwner(NewOwner);
+	SetOwner(OwningCharacter);
 }
 

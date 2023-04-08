@@ -31,9 +31,9 @@ protected:
 
 	/** The function called when the pickup is picked up. */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Pickup", meta=(DisplayName="Pickup"))
-	void Pickup(AActor* NewOwner);
+	void Pickup(class AUS_Character* OwningCharacter);
 
-	void Pickup_Implementation(AActor* NewOwner);
+	void Pickup_Implementation(AUS_Character* OwningCharacter);
 
 
 public:	
