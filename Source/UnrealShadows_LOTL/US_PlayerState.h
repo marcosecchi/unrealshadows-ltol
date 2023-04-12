@@ -17,11 +17,11 @@ class UNREALSHADOWS_LOTL_API AUS_PlayerState : public APlayerState
 protected:
 
 	/** The experience points of the player. */
-	UPROPERTY(EditDefaultsOnly, ReplicatedUsing="OnRep_Xp", Category = "Experience")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, ReplicatedUsing="OnRep_Xp", Category = "Experience")
 	int Xp = 0;
 
 	/** The experience points gained so far by the player. */
-	UPROPERTY(EditDefaultsOnly, ReplicatedUsing="OnRep_LevelXpUp", Category = "Experience")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, ReplicatedUsing="OnRep_LevelXpUp", Category = "Experience")
 	int LevelXp = 0;
 
 	UFUNCTION()
@@ -49,5 +49,8 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FOnLevelXpUp OnLevelXpUp;
+
+	/******************** ADD **********************/
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 };
