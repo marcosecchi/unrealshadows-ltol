@@ -2,7 +2,6 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
-#include "Engine/UserDefinedStruct.h"
 #include "US_CharacterStats.generated.h"
 
 USTRUCT(BlueprintType)
