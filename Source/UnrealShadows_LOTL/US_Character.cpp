@@ -12,6 +12,8 @@
 
 AUS_Character::AUS_Character()
 {
+	PrimaryActorTick.bCanEverTick = true;
+	
 	// Create the camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
@@ -44,7 +46,6 @@ AUS_Character::AUS_Character()
 	GetCharacterMovement()->MaxWalkSpeed = 500.f;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
-
 }
 
 // Handle the movement input
@@ -104,6 +105,11 @@ void AUS_Character::Interact(const FInputActionValue& Value)
 //	GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Red, TEXT("Interact"));
 }
 
+void AUS_Character::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+}
+
 void AUS_Character::BeginPlay()
 {
 	Super::BeginPlay();
@@ -118,10 +124,13 @@ void AUS_Character::BeginPlay()
 		}
 	}
 
+	/****************************** ADD ****************************/
 	TArray<FUS_CharacterStats*> CharacterStatsRows;
 	CharacterDataTable->GetAllRows<FUS_CharacterStats>(TEXT("US_Character"), CharacterStatsRows);
 
 	CharacterStats = CharacterStatsRows[0];
+
+	/****************************** END ADD ****************************/
 }
 
 

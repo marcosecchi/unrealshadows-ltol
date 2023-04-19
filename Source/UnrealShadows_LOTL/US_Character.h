@@ -74,6 +74,8 @@ protected:
 	void Interact(const FInputActionValue& Value);
 
 public:	
+	virtual void Tick(float DeltaSeconds) override;
+
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	// Getters for the camera components
