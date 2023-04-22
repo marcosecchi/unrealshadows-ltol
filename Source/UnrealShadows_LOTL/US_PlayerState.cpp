@@ -15,37 +15,27 @@ void AUS_PlayerState::AddXp(const int32 Value)
 	OnXpChanged.Broadcast(this, Xp);
 
 	GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Yellow, FString::Printf(TEXT("Total Xp: %d"), Xp));
-	
-	
-	
-	
-	const auto Character = Cast<AUS_Character>(GetPawn());
-	if (Character)
+
+	if (const auto Character = Cast<AUS_Character>(GetPawn()))
 	{
 		if(Character->GetCharacterStats()->NextLevelXp < Xp)
 		{
 			GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Red, TEXT("Level Up"));
 			
-			
-			LevelXp++;
-			OnLevelXpUp.Broadcast(this, LevelXp);
+			CharacterLevel++;
+			OnCharacterLevelUp.Broadcast(this, CharacterLevel);
 		}
 	}
 }
 
-int32 AUS_PlayerState::GetLevelXp() const
-{
-	return LevelXp;
-}
-
-void AUS_PlayerState::OnRep_Xp(int32 OldXp)
+void AUS_PlayerState::OnRep_Xp(int32 OldValue)
 {
 	OnXpChanged.Broadcast(this, Xp);
 }
 
-void AUS_PlayerState::OnRep_LevelXpUp(int32 OldLevelXp)
+void AUS_PlayerState::OnRep_CharacterLevelUp(int32 OldValue)
 {
-	OnLevelXpUp.Broadcast(this, LevelXp);
+	OnCharacterLevelUp.Broadcast(this, CharacterLevel);
 }
 
 /**
@@ -57,5 +47,5 @@ void AUS_PlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AUS_PlayerState, Xp);
-	DOREPLIFETIME(AUS_PlayerState, LevelXp);
+	DOREPLIFETIME(AUS_PlayerState, CharacterLevel);
 }
