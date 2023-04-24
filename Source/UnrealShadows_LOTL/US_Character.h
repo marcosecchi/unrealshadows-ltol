@@ -43,13 +43,12 @@ class UNREALSHADOWS_LOTL_API AUS_Character : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	UInputAction* InteractAction;
 
-	/********************** ADD **********************/
+	/** A reference to the data table containing the character stats. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Data", meta = (AllowPrivateAccess = "true"))
 	class UDataTable* CharacterDataTable;
 
+	/** The character stats, retrieved from the data table. */
 	struct FUS_CharacterStats* CharacterStats;
-
-	/********************** END ADD **********************/
 	
 public:
 	AUS_Character();
@@ -70,7 +69,7 @@ protected:
 
 	/** The function called when the character stops sprinting. */
 	void SprintEnd(const FInputActionValue& Value);
-
+	
 	/** The function called when the character interacts with the environment. */
 	void Interact(const FInputActionValue& Value);
 
@@ -87,7 +86,5 @@ public:
 	/** Returns the CameraComponent used as a main camera for the character. */
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
-	/********************** ADD **********************/
 	FORCEINLINE FUS_CharacterStats* GetCharacterStats() const { return CharacterStats; }
-	/********************** END **********************/
 };

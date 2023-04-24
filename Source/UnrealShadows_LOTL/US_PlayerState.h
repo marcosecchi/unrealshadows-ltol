@@ -48,7 +48,6 @@ public:
 
 	FORCEINLINE int32 GetCharacterLevel() const { return CharacterLevel; }
 
-	/******************** ADD **********************/
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 };

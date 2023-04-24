@@ -87,23 +87,25 @@ void AUS_Character::Look(const FInputActionValue& Value)
 void AUS_Character::SprintStart(const FInputActionValue& Value)
 {
 	//	GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Blue, TEXT("SprintStart"));
-	/********** CHANGE THIS **********/
-	GetCharacterMovement()->MaxWalkSpeed = 3000.f;
-//	GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->SprintSpeed;
+	if (GetCharacterStats())
+	{
+		GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->SprintSpeed;
+	}
 }
 
 // Handle the change of speed when the sprint button is released
 void AUS_Character::SprintEnd(const FInputActionValue& Value)
 {
-//	GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Blue, TEXT("SprintEnd"));
-	/********** CHANGE THIS **********/
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
-//	GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->WalkSpeed;
+	//	GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Blue, TEXT("SprintEnd"));
+	if(GetCharacterStats())
+	{
+		GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->WalkSpeed;
+	}
 }
 
 void AUS_Character::Interact(const FInputActionValue& Value)
 {
-//	GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Red, TEXT("Interact"));
+	//	GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Red, TEXT("Interact"));
 }
 
 void AUS_Character::Tick(float DeltaSeconds)
@@ -125,21 +127,27 @@ void AUS_Character::BeginPlay()
 		}
 	}
 
-	/********** ADD THIS **********/
-	TArray<FUS_CharacterStats*> CharacterStatsRows;
-	CharacterDataTable->GetAllRows<FUS_CharacterStats>(TEXT("US_Character"), CharacterStatsRows);
-
-	auto PlayerLevel = 1;
-	if (const AUS_PlayerState* State = Cast<AUS_PlayerState>(GetPlayerState()))
+	// Get the character stats from the data table and assign them to the row reference
+	if(CharacterDataTable)
 	{
-		PlayerLevel = State->GetCharacterLevel();
+		TArray<FUS_CharacterStats*> CharacterStatsRows;
+		CharacterDataTable->GetAllRows<FUS_CharacterStats>(TEXT("US_Character"), CharacterStatsRows);
+
+		if(CharacterStatsRows.Num() != 0)
+		{
+			auto CharacterLevel = 1;
+			/********** ADD LATER **********/
+			if (const AUS_PlayerState* State = Cast<AUS_PlayerState>(GetPlayerState()))
+			{
+				CharacterLevel = FMath::Clamp(State->GetCharacterLevel(), 1, CharacterStatsRows.Num());
+			}
+			/********** ADD LATER END **********/
+			CharacterStats = CharacterStatsRows[CharacterLevel - 1];
+
+			GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->WalkSpeed;
+		}
+		
 	}
-	CharacterStats = CharacterStatsRows[PlayerLevel - 1];
-
-	GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->WalkSpeed;
-	/********** END **********/
-
-
 }
 
 
@@ -158,22 +166,3 @@ void AUS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AUS_Character::SprintEnd);
 	}
 }
-
-/****************************** ADD ****************************/
-/*
-FUS_CharacterStats* AUS_Character::GetCharacterStats()
-{
-	TArray<FUS_CharacterStats*> CharacterStatsRows;
-	CharacterDataTable->GetAllRows<FUS_CharacterStats>(TEXT("US_Character"), CharacterStatsRows);
-
-	auto PlayerLevel = 1;
-	if (const AUS_PlayerState* State = Cast<AUS_PlayerState>(GetPlayerState()))
-	{
-		PlayerLevel = State->GetCharacterLevel();
-	}
-	return CharacterStatsRows[PlayerLevel - 1];
-}
-*/
-/****************************** END ADD ****************************/
-
-
