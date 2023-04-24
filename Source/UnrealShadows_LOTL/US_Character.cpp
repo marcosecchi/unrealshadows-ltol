@@ -146,10 +146,8 @@ void AUS_Character::BeginPlay()
 
 			GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->WalkSpeed;
 		}
-		
 	}
 }
-
 
 // Called to bind functionality to input
 void AUS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
