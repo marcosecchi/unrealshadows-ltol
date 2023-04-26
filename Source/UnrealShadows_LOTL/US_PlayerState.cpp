@@ -4,17 +4,12 @@
 #include "US_CharacterStats.h"
 #include "Net/UnrealNetwork.h"
 
-int32 AUS_PlayerState::GetXp() const
-{
-	return Xp;
-}
-
 void AUS_PlayerState::AddXp(const int32 Value)
 {
 	Xp += Value;
-	OnXpChanged.Broadcast(this, Xp);
+	OnXpChanged.Broadcast(Xp);
 
-	// GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Yellow, FString::Printf(TEXT("Total Xp: %d"), Xp));
+	// GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Yellow, FString::Printf(TEXT("Xp: %d"), Value));
 
 	if (const auto Character = Cast<AUS_Character>(GetPawn()))
 	{
@@ -24,19 +19,19 @@ void AUS_PlayerState::AddXp(const int32 Value)
 			
 			CharacterLevel++;
 			Character->UpdateCharacterStats(CharacterLevel);
-			OnCharacterLevelUp.Broadcast(this, CharacterLevel);
+			OnCharacterLevelUp.Broadcast(CharacterLevel);
 		}
 	}
 }
 
-void AUS_PlayerState::OnRep_Xp(int32 OldValue)
+void AUS_PlayerState::OnRep_Xp(int32 OldValue) const
 {
-	OnXpChanged.Broadcast(this, Xp);
+	OnXpChanged.Broadcast(Xp);
 }
 
-void AUS_PlayerState::OnRep_CharacterLevelUp(int32 OldValue)
+void AUS_PlayerState::OnRep_CharacterLevelUp(int32 OldValue) const
 {
-	OnCharacterLevelUp.Broadcast(this, CharacterLevel);
+	OnCharacterLevelUp.Broadcast(CharacterLevel);
 }
 
 /**

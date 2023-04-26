@@ -5,9 +5,9 @@
 #include "US_PlayerState.generated.h"
 
 // Event handler for experience points changed
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnXpChanged, AUS_PlayerState*, PlayerState, int32, NewXp);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnXpChanged, int32, NewXp);
 // Event handler for level experience changed
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCharacterLevelUp, AUS_PlayerState*, PlayerState, int32, NewLevelXp);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterLevelUp, int32, NewLevelXp);
 
 UCLASS()
 class UNREALSHADOWS_LOTL_API AUS_PlayerState : public APlayerState
@@ -25,17 +25,13 @@ protected:
 	int CharacterLevel = 1;
 
 	UFUNCTION()
-	void OnRep_Xp(int32 OldValue);
+	void OnRep_Xp(int32 OldValue) const;
 
 	UFUNCTION()
-	void OnRep_CharacterLevelUp(int32 OldValue);
+	void OnRep_CharacterLevelUp(int32 OldValue) const;
 
 public:
-
-	/** Getter for the experience points of the player. */
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category="Experience")
-	int32 GetXp() const;
-
+	
 	/** Adds experience points to the player. */
 	UFUNCTION(BlueprintCallable, Category="Experience")
 	void AddXp(int32 Value);
@@ -45,8 +41,6 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FOnCharacterLevelUp OnCharacterLevelUp;
-
-	FORCEINLINE int32 GetCharacterLevel() const { return CharacterLevel; }
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
