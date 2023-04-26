@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "US_PlayerState.h"
 #include "GameFramework/Character.h"
 #include "US_Character.generated.h"
 
@@ -78,6 +79,9 @@ public:
 
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
+	/** Updates the character stats based on the level. */
+	void UpdateCharacterStats(int32 CharacterLevel);
+
 	// Getters for the camera components
 	
 	/** Returns the SpringArmComponent used to connect the Camera to the character Capsule component. */
@@ -86,5 +90,6 @@ public:
 	/** Returns the CameraComponent used as a main camera for the character. */
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	// Getter for the character statistics based on the level
 	FORCEINLINE FUS_CharacterStats* GetCharacterStats() const { return CharacterStats; }
 };

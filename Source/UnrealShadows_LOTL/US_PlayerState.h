@@ -15,7 +15,7 @@ class UNREALSHADOWS_LOTL_API AUS_PlayerState : public APlayerState
 	GENERATED_BODY()
 
 protected:
-
+	
 	/** The experience points of the player. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, ReplicatedUsing="OnRep_Xp", Category = "Experience")
 	int Xp = 0;
@@ -29,6 +29,7 @@ protected:
 
 	UFUNCTION()
 	void OnRep_CharacterLevelUp(int32 OldValue);
+
 
 public:
 

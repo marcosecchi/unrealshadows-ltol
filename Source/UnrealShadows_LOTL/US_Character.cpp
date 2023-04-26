@@ -8,7 +8,6 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "US_CharacterStats.h"
-#include "US_PlayerState.h"
 #include "Engine/DataTable.h"
 
 AUS_Character::AUS_Character()
@@ -119,7 +118,7 @@ void AUS_Character::BeginPlay()
 
 	// Add the base mapping context to the player controller only if we are using a PlayerController
 	// and if the subsystem is available
-	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	if (const APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
@@ -127,26 +126,7 @@ void AUS_Character::BeginPlay()
 		}
 	}
 
-	// Get the character stats from the data table and assign them to the row reference
-	if(CharacterDataTable)
-	{
-		TArray<FUS_CharacterStats*> CharacterStatsRows;
-		CharacterDataTable->GetAllRows<FUS_CharacterStats>(TEXT("US_Character"), CharacterStatsRows);
-
-		if(CharacterStatsRows.Num() != 0)
-		{
-			auto CharacterLevel = 1;
-			/********** ADD LATER **********/
-			if (const AUS_PlayerState* State = Cast<AUS_PlayerState>(GetPlayerState()))
-			{
-				CharacterLevel = FMath::Clamp(State->GetCharacterLevel(), 1, CharacterStatsRows.Num());
-			}
-			/********** ADD LATER END **********/
-			CharacterStats = CharacterStatsRows[CharacterLevel - 1];
-
-			GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->WalkSpeed;
-		}
-	}
+	UpdateCharacterStats(1);
 }
 
 // Called to bind functionality to input
@@ -162,5 +142,26 @@ void AUS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &AUS_Character::Interact);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &AUS_Character::SprintStart);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AUS_Character::SprintEnd);
+	}
+}
+
+// Get the character stats from the data table and assign them to the row reference
+void AUS_Character::UpdateCharacterStats(int32 CharacterLevel)
+{
+	if(CharacterDataTable)
+	{
+		// Get all the rows from the data table
+		TArray<FUS_CharacterStats*> CharacterStatsRows;
+		CharacterDataTable->GetAllRows<FUS_CharacterStats>(TEXT("US_Character"), CharacterStatsRows);
+
+		// Get the row from the data table based on the character level
+		if(CharacterStatsRows.Num() > 0)
+		{
+			const auto NewCharacterLevel = FMath::Clamp(CharacterLevel, 1, CharacterStatsRows.Num());
+			CharacterStats = CharacterStatsRows[NewCharacterLevel - 1];
+
+			GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->WalkSpeed;
+			// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Level Up: %d"), NewCharacterLevel));
+		}
 	}
 }
