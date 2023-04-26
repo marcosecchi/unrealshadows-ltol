@@ -1,4 +1,4 @@
- #pragma once
+#pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
@@ -29,7 +29,6 @@ protected:
 
 	UFUNCTION()
 	void OnRep_CharacterLevelUp(int32 OldValue);
-
 
 public:
 
