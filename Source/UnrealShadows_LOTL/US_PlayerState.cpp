@@ -7,6 +7,7 @@
 void AUS_PlayerState::AddXp(const int32 Value)
 {
 	Xp += Value;
+	OnXpChanged.Broadcast(Xp);
 
 	 GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Yellow, FString::Printf(TEXT("Total Xp: %d"), Value));
 
@@ -17,6 +18,7 @@ void AUS_PlayerState::AddXp(const int32 Value)
 			GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Red, TEXT("Level Up!"));
 			
 			CharacterLevel++;
+	OnCharacterLevelUp.Broadcast(CharacterLevel);
 			Character->UpdateCharacterStats(CharacterLevel);
 		}
 	}
@@ -40,6 +42,6 @@ void AUS_PlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(AUS_PlayerState, Xp);
-	DOREPLIFETIME(AUS_PlayerState, CharacterLevel);
+	DOREPLIFETIME_CONDITION(AUS_PlayerState, Xp, COND_OwnerOnly);
+	DOREPLIFETIME_CONDITION(AUS_PlayerState, CharacterLevel, COND_OwnerOnly);
 }
