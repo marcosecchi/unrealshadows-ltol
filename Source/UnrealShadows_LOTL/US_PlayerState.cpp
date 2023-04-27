@@ -18,7 +18,7 @@ void AUS_PlayerState::AddXp(const int32 Value)
 			GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Red, TEXT("Level Up!"));
 			
 			CharacterLevel++;
-	OnCharacterLevelUp.Broadcast(CharacterLevel);
+			OnCharacterLevelUp.Broadcast(CharacterLevel);
 			Character->UpdateCharacterStats(CharacterLevel);
 		}
 	}
