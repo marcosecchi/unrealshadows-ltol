@@ -8,13 +8,13 @@ void AUS_PlayerState::AddXp(const int32 Value)
 {
 	Xp += Value;
 
-	// GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Yellow, FString::Printf(TEXT("Total Xp: %d"), Value));
+	 GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Yellow, FString::Printf(TEXT("Total Xp: %d"), Value));
 
 	if (const auto Character = Cast<AUS_Character>(GetPawn()))
 	{
 		if(Character->GetCharacterStats()->NextLevelXp < Xp)
 		{
-			// GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Red, TEXT("Level Up!"));
+			GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Red, TEXT("Level Up!"));
 			
 			CharacterLevel++;
 			Character->UpdateCharacterStats(CharacterLevel);
