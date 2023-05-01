@@ -50,7 +50,7 @@ class UNREALSHADOWS_LOTL_API AUS_Character : public ACharacter
 
 	/** The character stats, retrieved from the data table. */
 	struct FUS_CharacterStats* CharacterStats;
-	
+
 public:
 	AUS_Character();
 
@@ -70,7 +70,16 @@ protected:
 
 	/** The function called when the character stops sprinting. */
 	void SprintEnd(const FInputActionValue& Value);
+
+	/***************** ADD *****************/
+	UFUNCTION(Server, Reliable)
+	void SprintStart_Server(const FInputActionValue& Value);
+
+	UFUNCTION(Server, Reliable)
+	void SprintEnd_Server(const FInputActionValue& Value);
 	
+	/***************** END ADD *****************/
+
 	/** The function called when the character interacts with the environment. */
 	void Interact(const FInputActionValue& Value);
 

@@ -88,7 +88,9 @@ void AUS_Character::SprintStart(const FInputActionValue& Value)
 	//	GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Blue, TEXT("SprintStart"));
 	if (GetCharacterStats())
 	{
-		GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->SprintSpeed;
+		/*********************** CHANGE *************************/
+//		GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->SprintSpeed;
+		SprintStart_Server(Value);
 	}
 }
 
@@ -98,9 +100,24 @@ void AUS_Character::SprintEnd(const FInputActionValue& Value)
 	//	GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Blue, TEXT("SprintEnd"));
 	if(GetCharacterStats())
 	{
-		GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->WalkSpeed;
+		/*********************** CHANGE *************************/
+//		GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->WalkSpeed;
+		SprintEnd_Server(Value);
 	}
 }
+
+/***************** ADD *****************/
+
+void AUS_Character::SprintStart_Server_Implementation(const FInputActionValue& Value)
+{
+	GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->SprintSpeed;
+}
+
+void AUS_Character::SprintEnd_Server_Implementation(const FInputActionValue& Value)
+{
+	GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->WalkSpeed;
+}
+/***************** AND ADD *****************/
 
 void AUS_Character::Interact(const FInputActionValue& Value)
 {
@@ -148,6 +165,14 @@ void AUS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 // Get the character stats from the data table and assign them to the row reference
 void AUS_Character::UpdateCharacterStats(int32 CharacterLevel)
 {
+	/*********************** ADD LATER *************************/
+	auto IsSprinting = false;
+	if(GetCharacterStats())
+	{
+		IsSprinting = GetCharacterMovement()->MaxWalkSpeed == GetCharacterStats()->SprintSpeed;
+	}
+	/*********************** END ADD *************************/
+	
 	if(CharacterDataTable)
 	{
 		// Get all the rows from the data table
@@ -161,7 +186,13 @@ void AUS_Character::UpdateCharacterStats(int32 CharacterLevel)
 			CharacterStats = CharacterStatsRows[NewCharacterLevel - 1];
 
 			GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->WalkSpeed;
+			/*********************** ADD *************************/
+			if(IsSprinting)
+			{
+				SprintStart_Server(NULL);
+			}
 			// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Level Up: %d"), NewCharacterLevel));
+			/*********************** END ADD *************************/
 		}
 	}
 }
