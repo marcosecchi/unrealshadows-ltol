@@ -85,39 +85,30 @@ void AUS_Character::Look(const FInputActionValue& Value)
 // Handle the change of speed when the sprint button is pressed
 void AUS_Character::SprintStart(const FInputActionValue& Value)
 {
-	//	GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Blue, TEXT("SprintStart"));
-	if (GetCharacterStats())
-	{
-		/*********************** CHANGE *************************/
-//		GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->SprintSpeed;
-		SprintStart_Server(Value);
-	}
+		SprintStart_Server();
 }
 
 // Handle the change of speed when the sprint button is released
 void AUS_Character::SprintEnd(const FInputActionValue& Value)
 {
-	//	GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Blue, TEXT("SprintEnd"));
-	if(GetCharacterStats())
+		SprintEnd_Server();
+}
+
+void AUS_Character::SprintStart_Server_Implementation()
+{
+	if (GetCharacterStats())
 	{
-		/*********************** CHANGE *************************/
-//		GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->WalkSpeed;
-		SprintEnd_Server(Value);
+		GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->SprintSpeed;
 	}
 }
 
-/***************** ADD *****************/
-
-void AUS_Character::SprintStart_Server_Implementation(const FInputActionValue& Value)
+void AUS_Character::SprintEnd_Server_Implementation()
 {
-	GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->SprintSpeed;
+	if (GetCharacterStats())
+	{
+		GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->WalkSpeed;
+	}
 }
-
-void AUS_Character::SprintEnd_Server_Implementation(const FInputActionValue& Value)
-{
-	GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->WalkSpeed;
-}
-/***************** AND ADD *****************/
 
 void AUS_Character::Interact(const FInputActionValue& Value)
 {
@@ -189,7 +180,7 @@ void AUS_Character::UpdateCharacterStats(int32 CharacterLevel)
 			/*********************** ADD *************************/
 			if(IsSprinting)
 			{
-				SprintStart_Server(NULL);
+				SprintStart_Server();
 			}
 			// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Level Up: %d"), NewCharacterLevel));
 			/*********************** END ADD *************************/

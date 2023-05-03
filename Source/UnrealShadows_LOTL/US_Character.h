@@ -71,14 +71,13 @@ protected:
 	/** The function called when the character stops sprinting. */
 	void SprintEnd(const FInputActionValue& Value);
 
-	/***************** ADD *****************/
+	/** The function called on the server when the character starts sprinting. */
 	UFUNCTION(Server, Reliable)
-	void SprintStart_Server(const FInputActionValue& Value);
+	void SprintStart_Server();
 
+	/** The function called on the server when the character stops sprinting. */
 	UFUNCTION(Server, Reliable)
-	void SprintEnd_Server(const FInputActionValue& Value);
-	
-	/***************** END ADD *****************/
+	void SprintEnd_Server();
 
 	/** The function called when the character interacts with the environment. */
 	void Interact(const FInputActionValue& Value);
