@@ -117,16 +117,20 @@ void AUS_Character::SprintEnd_Server_Implementation()
 
 void AUS_Character::Interact(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(30, 5.f, FColor::Red, TEXT("Interact"));
+//	GEngine->AddOnScreenDebugMessage(30, 5.f, FColor::Red, TEXT("Interact"));
 	if(InteractableActor)
 	{
-		GEngine->AddOnScreenDebugMessage(31, 5.f, FColor::Red, TEXT("Sending Interact"));
+//		GEngine->AddOnScreenDebugMessage(31, 5.f, FColor::Red, TEXT("Sending Interact"));
 		// Display InteractableActor name
-		GEngine->AddOnScreenDebugMessage(32, 5.f, FColor::Red, InteractableActor->GetName());
+//		GEngine->AddOnScreenDebugMessage(32, 5.f, FColor::Red, InteractableActor->GetName());
 		// Call the interact method on the hit actor
-		IUS_Interactable::Execute_Interact(InteractableActor, this);
-
+		Interact_Server();
 	}
+}
+
+void AUS_Character::Interact_Server_Implementation()
+{
+	IUS_Interactable::Execute_Interact(InteractableActor, this);
 }
 
 void AUS_Character::Tick(float DeltaSeconds)

@@ -87,6 +87,13 @@ protected:
 	/** The function called when the character interacts with the environment. */
 	void Interact(const FInputActionValue& Value);
 
+	/************************ ADD THIS ************************/
+
+	UFUNCTION(Server, Reliable)
+	void Interact_Server();
+
+	/************************* END ADD THIS *********************/
+
 public:	
 	virtual void Tick(float DeltaSeconds) override;
 
