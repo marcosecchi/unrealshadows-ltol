@@ -94,6 +94,7 @@ void AUS_Character::SprintEnd(const FInputActionValue& Value)
 		SprintEnd_Server();
 }
 
+// Executes the sprint start action from the server
 void AUS_Character::SprintStart_Server_Implementation()
 {
 	if (GetCharacterStats())
@@ -102,6 +103,7 @@ void AUS_Character::SprintStart_Server_Implementation()
 	}
 }
 
+// Executes the sprint end action from the server
 void AUS_Character::SprintEnd_Server_Implementation()
 {
 	if (GetCharacterStats())
@@ -156,13 +158,11 @@ void AUS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 // Get the character stats from the data table and assign them to the row reference
 void AUS_Character::UpdateCharacterStats(int32 CharacterLevel)
 {
-	/*********************** ADD LATER *************************/
 	auto IsSprinting = false;
 	if(GetCharacterStats())
 	{
 		IsSprinting = GetCharacterMovement()->MaxWalkSpeed == GetCharacterStats()->SprintSpeed;
 	}
-	/*********************** END ADD *************************/
 	
 	if(CharacterDataTable)
 	{
@@ -177,13 +177,11 @@ void AUS_Character::UpdateCharacterStats(int32 CharacterLevel)
 			CharacterStats = CharacterStatsRows[NewCharacterLevel - 1];
 
 			GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->WalkSpeed;
-			/*********************** ADD *************************/
 			if(IsSprinting)
 			{
 				SprintStart_Server();
 			}
 			// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Level Up: %d"), NewCharacterLevel));
-			/*********************** END ADD *************************/
 		}
 	}
 }
