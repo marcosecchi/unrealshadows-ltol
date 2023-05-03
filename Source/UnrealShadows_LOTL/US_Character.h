@@ -51,6 +51,11 @@ class UNREALSHADOWS_LOTL_API AUS_Character : public ACharacter
 	/** The character stats, retrieved from the data table. */
 	struct FUS_CharacterStats* CharacterStats;
 
+	/************************ ADD THIS ************************/
+	UPROPERTY()
+	AActor* InteractableActor;
+	/************************* END ADD THIS *********************/
+
 public:
 	AUS_Character();
 

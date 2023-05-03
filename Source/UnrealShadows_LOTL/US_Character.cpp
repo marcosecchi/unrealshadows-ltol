@@ -9,7 +9,10 @@
 #include "EnhancedInputSubsystems.h"
 #include "US_CharacterStats.h"
 #include "Engine/DataTable.h"
-
+/**************************************** ADD THIS ****************************************/
+#include "US_Interactable.h"
+#include "Kismet/KismetSystemLibrary.h"
+/**************************************** END ADD THIS ****************************************/
 AUS_Character::AUS_Character()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -114,12 +117,62 @@ void AUS_Character::SprintEnd_Server_Implementation()
 
 void AUS_Character::Interact(const FInputActionValue& Value)
 {
-	//	GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Red, TEXT("Interact"));
+	GEngine->AddOnScreenDebugMessage(30, 5.f, FColor::Red, TEXT("Interact"));
+	if(InteractableActor)
+	{
+		GEngine->AddOnScreenDebugMessage(31, 5.f, FColor::Red, TEXT("Sending Interact"));
+		// Display InteractableActor name
+		GEngine->AddOnScreenDebugMessage(32, 5.f, FColor::Red, InteractableActor->GetName());
+		// Call the interact method on the hit actor
+		IUS_Interactable::Execute_Interact(InteractableActor, this);
+
+	}
 }
 
 void AUS_Character::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+
+	//GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green, FString::Printf(TEXT("Tick")));
+
+	/**************************************** ADD THIS ****************************************/
+	FHitResult HitResult;
+	FCollisionQueryParams QueryParams;
+	QueryParams.bTraceComplex = true;
+
+	auto SphereRadius = 50.f;
+	auto StartLocation = GetActorLocation() + GetActorForwardVector() * 150.f;
+	auto EndLocation = StartLocation + GetActorForwardVector() * 500.f;
+	
+	auto IsHit = UKismetSystemLibrary::SphereTraceSingle(
+	  GetWorld(),
+	  StartLocation,
+	  EndLocation,
+	  SphereRadius,
+	  UEngineTypes::ConvertToTraceType(ECC_WorldStatic),
+	  false,
+	  TArray<AActor*>(),
+	  EDrawDebugTrace::ForOneFrame,
+	  HitResult,
+	  true
+	);
+
+	if(IsHit)
+	{
+		// Display the hit result
+		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, SphereRadius, 12, FColor::Magenta, false, 1.f);
+	}
+	
+	// Check if the hit result implements the US_Interactable interface
+	if (IsHit && HitResult.GetActor()->GetClass()->ImplementsInterface(UUS_Interactable::StaticClass()))
+	{
+		InteractableActor = HitResult.GetActor();
+	}
+	else
+	{
+		InteractableActor = nullptr;
+	}	
+	/**************************************** END ADD THIS ****************************************/
 }
 
 void AUS_Character::BeginPlay()
