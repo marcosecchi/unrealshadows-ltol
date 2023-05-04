@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "US_PlayerState.h"
 #include "GameFramework/Character.h"
 #include "US_Character.generated.h"
 
@@ -51,10 +50,8 @@ class UNREALSHADOWS_LOTL_API AUS_Character : public ACharacter
 	/** The character stats, retrieved from the data table. */
 	struct FUS_CharacterStats* CharacterStats;
 
-	/************************ ADD THIS ************************/
 	UPROPERTY()
 	AActor* InteractableActor;
-	/************************* END ADD THIS *********************/
 
 public:
 	AUS_Character();
@@ -87,12 +84,9 @@ protected:
 	/** The function called when the character interacts with the environment. */
 	void Interact(const FInputActionValue& Value);
 
-	/************************ ADD THIS ************************/
-
+	/** The function called on the server when the character interacts with the environment. */
 	UFUNCTION(Server, Reliable)
 	void Interact_Server();
-
-	/************************* END ADD THIS *********************/
 
 public:	
 	virtual void Tick(float DeltaSeconds) override;
