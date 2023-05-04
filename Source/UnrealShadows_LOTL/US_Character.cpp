@@ -136,7 +136,6 @@ void AUS_Character::Tick(float DeltaSeconds)
 
 	if(GetLocalRole() != ROLE_Authority) return;
 	
-	/**************************************** ADD THIS ****************************************/
 	FHitResult HitResult;
 	FCollisionQueryParams QueryParams;
 	QueryParams.bTraceComplex = true;
@@ -168,7 +167,6 @@ void AUS_Character::Tick(float DeltaSeconds)
 	{
 		InteractableActor = nullptr;
 	}	
-	/**************************************** END ADD THIS ****************************************/
 }
 
 void AUS_Character::BeginPlay()
