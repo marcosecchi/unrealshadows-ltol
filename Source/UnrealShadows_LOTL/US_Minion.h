@@ -11,6 +11,9 @@ class UNREALSHADOWS_LOTL_API AUS_Minion : public ACharacter
 {
 	GENERATED_BODY()
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Minion AI", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UPawnSensingComponent> PawnSense;
+
 public:
 	// Sets default values for this character's properties
 	AUS_Minion();
@@ -40,6 +43,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+//	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	/** Returns the CameraComponent used as a main camera for the character. */
+	FORCEINLINE UPawnSensingComponent* GetPawnSense() const { return PawnSense; }
 
 };

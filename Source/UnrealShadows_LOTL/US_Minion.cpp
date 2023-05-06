@@ -1,12 +1,22 @@
 #include "US_Minion.h"
+
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Perception/PawnSensingComponent.h"
+#include "Blueprint/AIBlueprintHelperLibrary.h"
 
 AUS_Minion::AUS_Minion()
 {
+	PawnSense = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSense"));
+	PawnSense->SetPeripheralVisionAngle(45.f);
+	
 	PrimaryActorTick.bCanEverTick = true;
 
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = true;
+	bUseControllerRotationRoll = false;
 
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(60.f, 96.0f);
@@ -32,7 +42,21 @@ void AUS_Minion::BeginPlay()
 {
 	Super::BeginPlay();
 
-//	GetCharacterMovement()->MaxWalkSpeed = PatrolSpeed;
+	// PawnSense->OnSeePawn.AddDynamic(this, &AUS_Minion::OnSeePawn);
+
+	//	GetCharacterMovement()->MaxWalkSpeed = PatrolSpeed;
+/*
+	FRandomStream RandStream;
+	RandStream.GenerateNewSeed();
+
+	// Get a random location within the AI character's movement radius
+	const FVector Location = GetActorLocation() + FVector(1, 1, 0) * PatrolRadius;
+	// Set the AI character's destination to the random location	
+	UAIBlueprintHelperLibrary::SimpleMoveToLocation(GetController(), Location);
+
+	// Diplays the AI character's destination
+	DrawDebugSphere(GetWorld(), Location, 25.f, 12, FColor::Red, true, 10.f, 0, 2.f);
+	*/
 }
 
 void AUS_Minion::SetPatrolSpeed()
@@ -53,9 +77,9 @@ void AUS_Minion::Tick(float DeltaTime)
 }
 
 // Called to bind functionality to input
-void AUS_Minion::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+//void AUS_Minion::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+//{
+//	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-}
+//}
 
