@@ -59,7 +59,8 @@ void AUS_Minion::SetNextPatrolLocation()
 {
 	GetCharacterMovement()->MaxWalkSpeed = PatrolSpeed;
 
-	const auto LocationFound = UNavigationSystemV1::K2_GetRandomReachablePointInRadius(this, GetActorLocation(), PatrolLocation, 5000.f);
+	const auto LocationFound = UNavigationSystemV1::K2_GetRandomReachablePointInRadius(
+		this, GetActorLocation(), PatrolLocation, PatrolRadius);
 	if(LocationFound)
 	{
 		UAIBlueprintHelperLibrary::SimpleMoveToLocation(GetController(), PatrolLocation);
@@ -80,7 +81,7 @@ void AUS_Minion::OnPawnDetected(APawn* Pawn)
 {
 	// Checks if the pawn is a US_Character
 	if (!Pawn->IsA<AUS_Character>()) return;
-
+	
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Character detected!"));
 	
 	// If the AI character is not already in the chase state

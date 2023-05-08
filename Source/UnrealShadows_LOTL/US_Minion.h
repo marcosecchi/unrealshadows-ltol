@@ -43,7 +43,6 @@ protected:
 	UFUNCTION()
 	void OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
 
-
 public:
 
 	UFUNCTION(BlueprintCallable, Category="Minion AI")
