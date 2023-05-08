@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -25,11 +23,19 @@ public:
 	float ChaseSpeed = 450.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Minion AI")
-	float PatrolRadius = 1000.0f;
+	float PatrolRadius = 50000.0f;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	// Called when a pawn has been detected by the pawn sensing component
+	UFUNCTION()
+	void OnPawnDetected(APawn* Pawn);
+
+	// Called when a pawn has been detected by the pawn sensing component
+	UFUNCTION()
+	void OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
 
 public:
 
@@ -42,10 +48,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void PostInitializeComponents() override;
+	
 	// Called to bind functionality to input
 //	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	/** Returns the CameraComponent used as a main camera for the character. */
+	/** Returns PawnSense component **/
 	FORCEINLINE UPawnSensingComponent* GetPawnSense() const { return PawnSense; }
-
 };
