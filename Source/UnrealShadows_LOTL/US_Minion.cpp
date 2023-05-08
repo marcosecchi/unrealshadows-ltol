@@ -4,6 +4,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Perception/PawnSensingComponent.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
+#include "Components/SphereComponent.h"
 
 AUS_Minion::AUS_Minion()
 {
@@ -21,7 +22,11 @@ AUS_Minion::AUS_Minion()
 	PawnSense->SightRadius = 1500.f;
 	PawnSense->HearingThreshold = 400.f;
 	PawnSense->LOSHearingThreshold = 800.f;
-	
+
+	Collision = CreateDefaultSubobject<USphereComponent>(TEXT("Collision"));
+	Collision->SetSphereRadius(100);
+	Collision->SetupAttachment(RootComponent);
+
 	GetCapsuleComponent()->InitCapsuleSize(60.f, 96.0f);
 	GetCapsuleComponent()->SetGenerateOverlapEvents(true);
 	
@@ -45,18 +50,24 @@ AUS_Minion::AUS_Minion()
 void AUS_Minion::BeginPlay()
 {
 	Super::BeginPlay();
-//	GetPawnSense()->OnSeePawn.AddDynamic(this, &AUS_Minion::OnPawnDetected);
-	SetPatrolSpeed();
+	Patrol();
 }
 
-void AUS_Minion::SetPatrolSpeed()
+void AUS_Minion::Patrol()
 {
+	bIsChasing = false;
 	GetCharacterMovement()->MaxWalkSpeed = PatrolSpeed;
 }
 
-void AUS_Minion::SetChaseSpeed()
+void AUS_Minion::Chase(APawn* Pawn)
 {
+	bIsChasing = false;
 	GetCharacterMovement()->MaxWalkSpeed = ChaseSpeed;
+	// Set the AI character's destination to the player's location
+	UAIBlueprintHelperLibrary::SimpleMoveToActor(GetController(), Pawn);
+
+	// Displays the AI character's destination
+	DrawDebugSphere(GetWorld(), Pawn->GetActorLocation(), 25.f, 12, FColor::Red, true, 10.f, 0, 2.f);
 }
 
 void AUS_Minion::OnPawnDetected(APawn* Pawn)
@@ -69,11 +80,7 @@ void AUS_Minion::OnPawnDetected(APawn* Pawn)
 	// If the AI character is not already in the chase state
 	if (GetCharacterMovement()->MaxWalkSpeed != ChaseSpeed)
 	{
-		// Set the AI character's destination to the player's location
-		UAIBlueprintHelperLibrary::SimpleMoveToActor(GetController(), Pawn);
-
-		// Displays the AI character's destination
-		DrawDebugSphere(GetWorld(), Pawn->GetActorLocation(), 25.f, 12, FColor::Red, true, 10.f, 0, 2.f);
+		Chase(Pawn);
 	}
 }
 
@@ -98,10 +105,3 @@ void AUS_Minion::PostInitializeComponents()
 	this->OnActorBeginOverlap.AddDynamic(this, &AUS_Minion::OnBeginOverlap);
 	GetPawnSense()->OnSeePawn.AddDynamic(this, &AUS_Minion::OnPawnDetected);
 }
-
-// Called to bind functionality to input
-//void AUS_Minion::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-//{
-//	Super::SetupPlayerInputComponent(PlayerInputComponent);
-//}
-

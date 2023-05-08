@@ -9,8 +9,11 @@ class UNREALSHADOWS_LOTL_API AUS_Minion : public ACharacter
 {
 	GENERATED_BODY()
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Minion AI", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Minion Perception", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UPawnSensingComponent> PawnSense;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Minion Perception", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class USphereComponent> Collision;
 
 public:
 	// Sets default values for this character's properties
@@ -37,22 +40,25 @@ protected:
 	UFUNCTION()
 	void OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
 
+	UPROPERTY(BlueprintReadOnly, Category = "Minion Perception")
+	bool bIsChasing;
+
 public:
 
 	UFUNCTION(BlueprintCallable, Category="Minion AI")
-	void SetPatrolSpeed();
+	void Patrol();
 
 	UFUNCTION(BlueprintCallable, Category="Minion AI")
-	void SetChaseSpeed();
+	void Chase(APawn* Pawn);
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void PostInitializeComponents() override;
 	
-	// Called to bind functionality to input
-//	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	/** Returns PawnSense component **/
 	FORCEINLINE UPawnSensingComponent* GetPawnSense() const { return PawnSense; }
+
+	/** Returns PawnSense component **/
+	FORCEINLINE USphereComponent* GetCollision() const { return Collision; }
 };
