@@ -1,4 +1,6 @@
 #include "US_Minion.h" 
+
+#include "NavigationSystem.h"
 #include "US_Character.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -50,18 +52,22 @@ AUS_Minion::AUS_Minion()
 void AUS_Minion::BeginPlay()
 {
 	Super::BeginPlay();
-	Patrol();
+	SetNextPatrolLocation();
 }
 
-void AUS_Minion::Patrol()
+void AUS_Minion::SetNextPatrolLocation()
 {
-	bIsChasing = false;
 	GetCharacterMovement()->MaxWalkSpeed = PatrolSpeed;
+
+	const auto LocationFound = UNavigationSystemV1::K2_GetRandomReachablePointInRadius(this, GetActorLocation(), PatrolLocation, 5000.f);
+	if(LocationFound)
+	{
+		UAIBlueprintHelperLibrary::SimpleMoveToLocation(GetController(), PatrolLocation);
+	}
 }
 
 void AUS_Minion::Chase(APawn* Pawn)
 {
-	bIsChasing = false;
 	GetCharacterMovement()->MaxWalkSpeed = ChaseSpeed;
 	// Set the AI character's destination to the player's location
 	UAIBlueprintHelperLibrary::SimpleMoveToActor(GetController(), Pawn);
@@ -92,10 +98,16 @@ void AUS_Minion::OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Character captured!"));
 }
 
-// Called every frame
 void AUS_Minion::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if(GetMovementComponent()->GetMaxSpeed() == ChaseSpeed) return;
+
+	if((GetActorLocation() - PatrolLocation).Size() < 500.f)
+	{
+		SetNextPatrolLocation();
+	}
 }
 
 void AUS_Minion::PostInitializeComponents()

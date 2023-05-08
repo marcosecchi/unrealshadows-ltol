@@ -15,6 +15,9 @@ class UNREALSHADOWS_LOTL_API AUS_Minion : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Minion Perception", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class USphereComponent> Collision;
 
+	UPROPERTY()
+	FVector PatrolLocation;
+
 public:
 	// Sets default values for this character's properties
 	AUS_Minion();
@@ -23,7 +26,7 @@ public:
 	float PatrolSpeed = 150.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Minion AI")
-	float ChaseSpeed = 450.0f;
+	float ChaseSpeed = 350.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Minion AI")
 	float PatrolRadius = 50000.0f;
@@ -40,13 +43,11 @@ protected:
 	UFUNCTION()
 	void OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
 
-	UPROPERTY(BlueprintReadOnly, Category = "Minion Perception")
-	bool bIsChasing;
 
 public:
 
 	UFUNCTION(BlueprintCallable, Category="Minion AI")
-	void Patrol();
+	void SetNextPatrolLocation();
 
 	UFUNCTION(BlueprintCallable, Category="Minion AI")
 	void Chase(APawn* Pawn);
@@ -55,7 +56,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void PostInitializeComponents() override;
-	
+
 	/** Returns PawnSense component **/
 	FORCEINLINE UPawnSensingComponent* GetPawnSense() const { return PawnSense; }
 
