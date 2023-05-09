@@ -1,5 +1,6 @@
 #include "US_Minion.h" 
 
+#include "AIController.h"
 #include "NavigationSystem.h"
 #include "US_Character.h"
 #include "Components/CapsuleComponent.h"
@@ -17,6 +18,7 @@ AUS_Minion::AUS_Minion()
 	bUseControllerRotationRoll = false;
 
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+	AIControllerClass = AAIController::StaticClass();
 
 	PawnSense = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSense"));
 	PawnSense->SensingInterval = .8f;
