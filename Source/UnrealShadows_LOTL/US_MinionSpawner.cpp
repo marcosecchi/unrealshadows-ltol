@@ -34,12 +34,20 @@ void AUS_MinionSpawner::BeginPlay()
 void AUS_MinionSpawner::Spawn()
 {
 	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+	SpawnParams.SpawnCollisionHandlingOverride =
+		ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 	
-	auto Minion = SpawnableMinions[FMath::RandRange(0, SpawnableMinions.Num() - 1)];
+	auto Minion =
+		SpawnableMinions[FMath::RandRange(0, SpawnableMinions.Num() - 1)];
 
-	const auto Rotation = FRotator(0.0f, FMath::RandRange(0.0f, 360.0f), 0.0f);
-	const auto Location = SpawnArea->GetComponentLocation() + FVector(FMath::RandRange(-SpawnArea->GetScaledBoxExtent().X, SpawnArea->GetScaledBoxExtent().X), FMath::RandRange(-SpawnArea->GetScaledBoxExtent().Y, SpawnArea->GetScaledBoxExtent().Y), 0.0f);
+	const auto Rotation =
+		FRotator(0.0f, FMath::RandRange(0.0f, 360.0f), 0.0f);
+	const auto Location =
+		SpawnArea->GetComponentLocation() +
+			FVector(
+				FMath::RandRange(-SpawnArea->GetScaledBoxExtent().X,SpawnArea->GetScaledBoxExtent().X),
+				FMath::RandRange(-SpawnArea->GetScaledBoxExtent().Y, SpawnArea->GetScaledBoxExtent().Y),
+				0.0f);
 	
 	GetWorld()->SpawnActor<AUS_Minion>(AUS_Minion::StaticClass(), Location, Rotation, SpawnParams);
 }
