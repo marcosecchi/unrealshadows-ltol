@@ -31,6 +31,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Minion AI")
 	float PatrolRadius = 50000.0f;
 
+	/***************************** ADD THIS *****************************/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Pickup")
+	TSubclassOf<class AUS_BasePickup> SpawnedPickup;
+	/***********************************************************************/
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -39,9 +44,25 @@ protected:
 	UFUNCTION()
 	void OnPawnDetected(APawn* Pawn);
 
+	/***************************** ADD THIS *****************************/
+	/** Called when a noise is heard by the pawn sensing component */
+	UFUNCTION()
+	void OnHearNoise(APawn* PawnInstigator, const FVector& Location, float Volume);
+	/***********************************************************************/
+
+	/***************************** ADD THIS *****************************/
+	UFUNCTION()
+	void OnDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
+	/***********************************************************************/
+
 	// Called when a pawn has been detected by the pawn sensing component
 	UFUNCTION()
 	void OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
+
+	/***************************** ADD THIS *****************************/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Health")
+	float Health = 5.f;
+	/**********************************************************/
 
 public:
 

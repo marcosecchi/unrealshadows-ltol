@@ -2,6 +2,7 @@
 
 #include "AIController.h"
 #include "NavigationSystem.h"
+#include "US_BasePickup.h"
 #include "US_Character.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -93,6 +94,42 @@ void AUS_Minion::OnPawnDetected(APawn* Pawn)
 	}
 }
 
+/************************************** ADD THIS ****************************************/
+void AUS_Minion::OnHearNoise(APawn* PawnInstigator, const FVector& Location, float Volume)
+{
+	// Checks if the pawn is a US_Character
+//	if (!PawnInstigator->IsA<AUS_Character>()) return;
+	
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Noise detected!"));
+	PatrolLocation = Location;
+	UAIBlueprintHelperLibrary::SimpleMoveToLocation(GetController(), PatrolLocation);
+}
+/****************************************************************************************/
+
+/************************************** ADD THIS ****************************************/
+void AUS_Minion::OnDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy,
+	AActor* DamageCauser)
+{
+	// Checks if the pawn is a US_Character
+//	if (!DamageCauser->IsA<AUS_Character>()) return;
+	//	Chase(DamageCauser);
+	
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Character damaged!"));
+	Health -= Damage;
+	if(Health < 0) return;
+
+	// Spawn SpawnedPickup at character location
+	if(SpawnedPickup)
+	{
+		FActorSpawnParameters SpawnParams;
+		GetWorld()->SpawnActor<AUS_BasePickup>(SpawnedPickup, GetActorLocation(), GetActorRotation(), SpawnParams);
+	}
+	Destroy(this);
+	
+}
+
+/****************************************************************************************/
+
 void AUS_Minion::OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
 	// Checks if the pawn is a US_Character
@@ -117,6 +154,12 @@ void AUS_Minion::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
+	/************************************** ADD THIS ****************************************/
+	this->OnTakeAnyDamage.AddDynamic(this, &AUS_Minion::OnDamage);
+	/******************************************************************************/
 	this->OnActorBeginOverlap.AddDynamic(this, &AUS_Minion::OnBeginOverlap);
 	GetPawnSense()->OnSeePawn.AddDynamic(this, &AUS_Minion::OnPawnDetected);
+	/************************************** ADD THIS ****************************************/
+	GetPawnSense()->OnHearNoise.AddDynamic(this, &AUS_Minion::OnHearNoise);
+	/******************************************************************************/
 }

@@ -11,6 +11,9 @@
 #include "Engine/DataTable.h"
 #include "US_Interactable.h"
 #include "Kismet/KismetSystemLibrary.h"
+/********************** ADD THIS CODE **********************/
+#include "Components/PawnNoiseEmitterComponent.h"
+/***********************************************************/
 
 AUS_Character::AUS_Character()
 {
@@ -27,6 +30,12 @@ AUS_Character::AUS_Character()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
+	/********************** ADD THIS CODE **********************/
+	NoiseEmitter = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("Noise Emitter"));
+	NoiseEmitter->NoiseLifetime = 0.01f;
+/***********************************************************/
+	
+	
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
@@ -166,7 +175,21 @@ void AUS_Character::Tick(float DeltaSeconds)
 	else
 	{
 		InteractableActor = nullptr;
-	}	
+	}
+
+	/********************** ADD THIS CODE *********************/
+	// If the character is running, emit noise
+	if(!GetCharacterStats()) return;
+	if (GetCharacterMovement()->MaxWalkSpeed == GetCharacterStats()->SprintSpeed)
+	{
+		auto Noise = 1.f;
+		if(GetCharacterStats()->StealthMultiplier)
+		{
+			Noise = Noise / GetCharacterStats()->StealthMultiplier;
+		}
+		NoiseEmitter->MakeNoise(this, Noise, GetActorLocation());
+	}
+	/*************************************************************/
 }
 
 void AUS_Character::BeginPlay()
