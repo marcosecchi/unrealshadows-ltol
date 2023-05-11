@@ -116,7 +116,7 @@ void AUS_Minion::OnDamage(AActor* DamagedActor, float Damage, const UDamageType*
 	
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Character damaged!"));
 	Health -= Damage;
-	if(Health < 0) return;
+	if(Health > 0) return;
 
 	// Spawn SpawnedPickup at character location
 	if(SpawnedPickup)
@@ -124,7 +124,9 @@ void AUS_Minion::OnDamage(AActor* DamagedActor, float Damage, const UDamageType*
 		FActorSpawnParameters SpawnParams;
 		GetWorld()->SpawnActor<AUS_BasePickup>(SpawnedPickup, GetActorLocation(), GetActorRotation(), SpawnParams);
 	}
-	Destroy(this);
+	Destroy();
+
+
 	
 }
 

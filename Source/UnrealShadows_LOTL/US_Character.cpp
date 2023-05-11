@@ -31,7 +31,7 @@ AUS_Character::AUS_Character()
 	FollowCamera->bUsePawnControlRotation = false;
 
 	/********************** ADD THIS CODE **********************/
-	NoiseEmitter = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("Noise Emitter"));
+	NoiseEmitter = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("NoiseEmitter"));
 	NoiseEmitter->NoiseLifetime = 0.01f;
 /***********************************************************/
 	
