@@ -93,17 +93,12 @@ void AUS_Minion::OnPawnDetected(APawn* Pawn)
 	}
 }
 
-/************************************** ADD THIS ****************************************/
 void AUS_Minion::OnHearNoise(APawn* PawnInstigator, const FVector& Location, float Volume)
 {
-	// Checks if the pawn is a US_Character
-//	if (!PawnInstigator->IsA<AUS_Character>()) return;
-	
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Noise detected!"));
 	PatrolLocation = Location;
 	UAIBlueprintHelperLibrary::SimpleMoveToLocation(GetController(), PatrolLocation);
 }
-/****************************************************************************************/
 
 void AUS_Minion::OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
@@ -131,8 +126,5 @@ void AUS_Minion::PostInitializeComponents()
 
 	this->OnActorBeginOverlap.AddDynamic(this, &AUS_Minion::OnBeginOverlap);
 	GetPawnSense()->OnSeePawn.AddDynamic(this, &AUS_Minion::OnPawnDetected);
-
-	/************************************** ADD THIS ****************************************/
 	GetPawnSense()->OnHearNoise.AddDynamic(this, &AUS_Minion::OnHearNoise);
-	/******************************************************************************/
 }

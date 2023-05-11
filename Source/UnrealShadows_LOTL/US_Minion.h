@@ -22,12 +22,15 @@ public:
 	// Sets default values for this character's properties
 	AUS_Minion();
 
+	// The regular speed of the character
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Minion AI")
 	float PatrolSpeed = 150.0f;
 
+	// The chase speed of the character
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Minion AI")
 	float ChaseSpeed = 350.0f;
 
+	// The distance used to find the next patrol location
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Minion AI")
 	float PatrolRadius = 50000.0f;
 
@@ -49,15 +52,18 @@ protected:
 
 public:
 
+	// Look for another location to reach
 	UFUNCTION(BlueprintCallable, Category="Minion AI")
 	void SetNextPatrolLocation();
 
+	// Start seeking a character
 	UFUNCTION(BlueprintCallable, Category="Minion AI")
 	void Chase(APawn* Pawn);
 	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// Called to bind callbacks
 	virtual void PostInitializeComponents() override;
 
 	/** Returns PawnSense component **/
