@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "US_BaseWeapon.generated.h"
+#include "US_BaseWeaponProjectile.generated.h"
 
 UCLASS()
-class UNREALSHADOWS_LOTL_API AUS_BaseWeapon : public AActor
+class UNREALSHADOWS_LOTL_API AUS_BaseWeaponProjectile : public AActor
 {
 	GENERATED_BODY()
 
@@ -27,7 +27,7 @@ class UNREALSHADOWS_LOTL_API AUS_BaseWeapon : public AActor
 
 public:	
 	// Sets default values for this actor's properties
-	AUS_BaseWeapon();
+	AUS_BaseWeaponProjectile();
 
 	/** The static mesh used to represent the pickup. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Weapon")

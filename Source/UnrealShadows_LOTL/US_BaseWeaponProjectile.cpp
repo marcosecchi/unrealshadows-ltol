@@ -1,11 +1,11 @@
-#include "US_BaseWeapon.h"
+#include "US_BaseWeaponProjectile.h"
 
 #include "Components/SphereComponent.h"
 #include "Components/PawnNoiseEmitterComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
 // Sets default values
-AUS_BaseWeapon::AUS_BaseWeapon()
+AUS_BaseWeaponProjectile::AUS_BaseWeaponProjectile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -37,14 +37,14 @@ AUS_BaseWeapon::AUS_BaseWeapon()
 }
 
 // Called when the game starts or when spawned
-void AUS_BaseWeapon::BeginPlay()
+void AUS_BaseWeaponProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void AUS_BaseWeapon::Tick(float DeltaTime)
+void AUS_BaseWeaponProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
