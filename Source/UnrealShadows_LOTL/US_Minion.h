@@ -18,6 +18,11 @@ class UNREALSHADOWS_LOTL_API AUS_Minion : public ACharacter
 	UPROPERTY()
 	FVector PatrolLocation;
 
+	/********************** ADD THIS ************************/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Minion Perception", meta = (AllowPrivateAccess = "true"))
+	float AlertRadius = 1000.0f;
+	/*********************************************************/
+	
 public:
 	// Sets default values for this character's properties
 	AUS_Minion();
@@ -51,6 +56,10 @@ protected:
 	void OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
 
 public:
+
+	// Go to a specific location
+	UFUNCTION(BlueprintCallable, Category="Minion AI")
+	void GoToLocation(const FVector& Location);
 
 	// Look for another location to reach
 	UFUNCTION(BlueprintCallable, Category="Minion AI")

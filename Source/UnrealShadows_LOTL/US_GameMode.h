@@ -16,4 +16,7 @@ class UNREALSHADOWS_LOTL_API AUS_GameMode : public AGameMode
 
 public:
 	AUS_GameMode();
+
+	UFUNCTION(BlueprintCallable, Category = "Minions")
+	void AlertMinions(class AUS_Minion* AlertingMinion, const FVector& Location, float Radius);
 };

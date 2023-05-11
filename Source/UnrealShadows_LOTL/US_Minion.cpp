@@ -3,6 +3,9 @@
 #include "AIController.h"
 #include "NavigationSystem.h"
 #include "US_Character.h"
+/************************** ADD THIS **************************/
+#include "US_GameMode.h"
+/*************************************************************/
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Perception/PawnSensingComponent.h"
@@ -77,6 +80,16 @@ void AUS_Minion::Chase(APawn* Pawn)
 
 	// Displays the AI character's destination
 	DrawDebugSphere(GetWorld(), Pawn->GetActorLocation(), 25.f, 12, FColor::Red, true, 10.f, 0, 2.f);
+
+	/******************************* ADD THIS *******************************/
+	// Get the game mode
+	const auto GameMode = Cast<AUS_GameMode>(GetWorld()->GetAuthGameMode());
+	if(GameMode)
+	{
+		GameMode->AlertMinions(this, Pawn->GetActorLocation(), 1000.f);
+	}
+	/***********************************************************************/
+	
 }
 
 void AUS_Minion::OnPawnDetected(APawn* Pawn)
@@ -96,8 +109,7 @@ void AUS_Minion::OnPawnDetected(APawn* Pawn)
 void AUS_Minion::OnHearNoise(APawn* PawnInstigator, const FVector& Location, float Volume)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Noise detected!"));
-	PatrolLocation = Location;
-	UAIBlueprintHelperLibrary::SimpleMoveToLocation(GetController(), PatrolLocation);
+	GoToLocation(Location);
 }
 
 void AUS_Minion::OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
@@ -106,6 +118,12 @@ void AUS_Minion::OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 	if (!OtherActor->IsA<AUS_Character>()) return;
 
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Character captured!"));
+}
+
+void AUS_Minion::GoToLocation(const FVector& Location)
+{
+	PatrolLocation = Location;
+	UAIBlueprintHelperLibrary::SimpleMoveToLocation(GetController(), PatrolLocation);
 }
 
 void AUS_Minion::Tick(float DeltaTime)
