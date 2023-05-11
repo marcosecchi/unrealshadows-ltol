@@ -30,11 +30,9 @@ AUS_Character::AUS_Character()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 
-	/********************** ADD THIS CODE **********************/
+	// Create the noise emitter
 	NoiseEmitter = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("NoiseEmitter"));
 	NoiseEmitter->NoiseLifetime = 0.01f;
-/***********************************************************/
-	
 	
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -177,19 +175,16 @@ void AUS_Character::Tick(float DeltaSeconds)
 		InteractableActor = nullptr;
 	}
 
-	/********************** ADD THIS CODE *********************/
 	// If the character is running, emit noise
-	if(!GetCharacterStats()) return;
 	if (GetCharacterMovement()->MaxWalkSpeed == GetCharacterStats()->SprintSpeed)
 	{
 		auto Noise = 1.f;
-		if(GetCharacterStats()->StealthMultiplier)
+		if(GetCharacterStats() && GetCharacterStats()->StealthMultiplier)
 		{
 			Noise = Noise / GetCharacterStats()->StealthMultiplier;
 		}
 		NoiseEmitter->MakeNoise(this, Noise, GetActorLocation());
 	}
-	/*************************************************************/
 }
 
 void AUS_Character::BeginPlay()
