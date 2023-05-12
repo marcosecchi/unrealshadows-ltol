@@ -27,12 +27,12 @@ void AUS_GameMode::AlertMinions(AUS_Minion* AlertingMinion, const FVector& Locat
 {
 	// Get all actors of type AUS_Minion
 	TArray<AActor*> Minions;
-
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AUS_Minion::StaticClass(), Minions);
 
 	// Loop through all minions
 	for (const auto Minion : Minions)
 	{
+		if(AlertingMinion == Minion) continue; 
 		// Get the distance between the alerting minion and the current minion
 		// If the distance is less than the radius
 		if (const auto Distance = FVector::Distance(AlertingMinion->GetActorLocation(), Minion->GetActorLocation()); Distance < Radius)

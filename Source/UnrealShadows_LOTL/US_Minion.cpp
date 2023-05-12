@@ -3,8 +3,9 @@
 #include "AIController.h"
 #include "NavigationSystem.h"
 #include "US_Character.h"
-/************************** ADD THIS **************************/
 #include "US_GameMode.h"
+/************************** ADD THIS **************************/
+#include "US_BasePickup.h"
 /*************************************************************/
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -81,15 +82,11 @@ void AUS_Minion::Chase(APawn* Pawn)
 	// Displays the AI character's destination
 	DrawDebugSphere(GetWorld(), Pawn->GetActorLocation(), 25.f, 12, FColor::Red, true, 10.f, 0, 2.f);
 
-	/******************************* ADD THIS *******************************/
-	// Get the game mode
-	const auto GameMode = Cast<AUS_GameMode>(GetWorld()->GetAuthGameMode());
-	if(GameMode)
+	// Get the game mode and alert the minions
+	if(const auto GameMode = Cast<AUS_GameMode>(GetWorld()->GetAuthGameMode()))
 	{
-		GameMode->AlertMinions(this, Pawn->GetActorLocation(), 1000.f);
+		GameMode->AlertMinions(this, Pawn->GetActorLocation(), AlertRadius);
 	}
-	/***********************************************************************/
-	
 }
 
 void AUS_Minion::OnPawnDetected(APawn* Pawn)
@@ -120,6 +117,32 @@ void AUS_Minion::OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Character captured!"));
 }
 
+/************************************** ADD THIS ****************************************/
+void AUS_Minion::OnDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy,
+	AActor* DamageCauser)
+{
+	// Checks if the pawn is a US_Character
+	//	if (!DamageCauser->IsA<AUS_Character>()) return;
+	//	Chase(DamageCauser);
+	
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Character damaged!"));
+	Health -= Damage;
+	if(Health > 0) return;
+
+	// Spawn SpawnedPickup at character location
+	if(SpawnedPickup)
+	{
+		FActorSpawnParameters SpawnParams;
+		GetWorld()->SpawnActor<AUS_BasePickup>(SpawnedPickup, GetActorLocation(), GetActorRotation(), SpawnParams);
+	}
+	Destroy();
+
+
+	
+}
+
+/****************************************************************************************/
+
 void AUS_Minion::GoToLocation(const FVector& Location)
 {
 	PatrolLocation = Location;
@@ -142,6 +165,9 @@ void AUS_Minion::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
+	/************************************** ADD THIS ****************************************/
+	this->OnTakeAnyDamage.AddDynamic(this, &AUS_Minion::OnDamage);
+	/******************************************************************************/
 	this->OnActorBeginOverlap.AddDynamic(this, &AUS_Minion::OnBeginOverlap);
 	GetPawnSense()->OnSeePawn.AddDynamic(this, &AUS_Minion::OnPawnDetected);
 	GetPawnSense()->OnHearNoise.AddDynamic(this, &AUS_Minion::OnHearNoise);

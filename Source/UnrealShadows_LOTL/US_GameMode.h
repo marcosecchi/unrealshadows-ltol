@@ -17,6 +17,7 @@ class UNREALSHADOWS_LOTL_API AUS_GameMode : public AGameMode
 public:
 	AUS_GameMode();
 
+	/** Sends an alert message to all the minions in the specified radius. */
 	UFUNCTION(BlueprintCallable, Category = "Minions")
 	void AlertMinions(class AUS_Minion* AlertingMinion, const FVector& Location, float Radius);
 };

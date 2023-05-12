@@ -15,13 +15,21 @@ class UNREALSHADOWS_LOTL_API AUS_Minion : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Minion Perception", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class USphereComponent> Collision;
 
+	// The location where the minion go while patrolling
 	UPROPERTY()
 	FVector PatrolLocation;
 
-	/********************** ADD THIS ************************/
+	// The radius used to alert other minions once this minion has detected something
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Minion Perception", meta = (AllowPrivateAccess = "true"))
-	float AlertRadius = 1000.0f;
-	/*********************************************************/
+	float AlertRadius = 6000.0f;
+
+	/***************************** ADD THIS *****************************/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Pickup", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class AUS_BasePickup> SpawnedPickup;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Health", meta = (AllowPrivateAccess = "true"))
+	float Health = 5.f;
+	/***********************************************************************/
 	
 public:
 	// Sets default values for this character's properties
@@ -54,6 +62,11 @@ protected:
 	// Called when a pawn has been detected by the pawn sensing component
 	UFUNCTION()
 	void OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
+
+	/***************************** ADD THIS *****************************/
+	UFUNCTION()
+	void OnDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
+	/***********************************************************************/
 
 public:
 
