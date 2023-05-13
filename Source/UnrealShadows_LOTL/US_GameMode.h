@@ -19,5 +19,5 @@ public:
 
 	/** Sends an alert message to all the minions in the specified radius. */
 	UFUNCTION(BlueprintCallable, Category = "Minions")
-	void AlertMinions(class AUS_Minion* AlertingMinion, const FVector& Location, float Radius);
+	void AlertMinions(class AActor* AlertInstigator, const FVector& Location, float Radius);
 };

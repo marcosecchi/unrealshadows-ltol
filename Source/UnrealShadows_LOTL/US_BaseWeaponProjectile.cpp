@@ -4,7 +4,6 @@
 #include "Components/PawnNoiseEmitterComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
-// Sets default values
 AUS_BaseWeaponProjectile::AUS_BaseWeaponProjectile()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.

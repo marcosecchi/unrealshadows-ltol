@@ -23,7 +23,7 @@ AUS_GameMode::AUS_GameMode()
 	}
 }
 
-void AUS_GameMode::AlertMinions(AUS_Minion* AlertingMinion, const FVector& Location, const float Radius)
+void AUS_GameMode::AlertMinions(AActor* AlertInstigator, const FVector& Location, const float Radius)
 {
 	// Get all actors of type AUS_Minion
 	TArray<AActor*> Minions;
@@ -32,10 +32,10 @@ void AUS_GameMode::AlertMinions(AUS_Minion* AlertingMinion, const FVector& Locat
 	// Loop through all minions
 	for (const auto Minion : Minions)
 	{
-		if(AlertingMinion == Minion) continue; 
+		if(AlertInstigator == Minion) continue; 
 		// Get the distance between the alerting minion and the current minion
 		// If the distance is less than the radius
-		if (const auto Distance = FVector::Distance(AlertingMinion->GetActorLocation(), Minion->GetActorLocation()); Distance < Radius)
+		if (const auto Distance = FVector::Distance(AlertInstigator->GetActorLocation(), Minion->GetActorLocation()); Distance < Radius)
 		{
 			// If the actor is a minion
 			if (const auto MinionCharacter = Cast<AUS_Minion>(Minion))
