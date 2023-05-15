@@ -12,7 +12,7 @@ AUS_BaseWeaponProjectile::AUS_BaseWeaponProjectile()
 	SphereCollision = CreateDefaultSubobject<USphereComponent>("Collision");
 	SphereCollision->SetGenerateOverlapEvents(true);
 	SphereCollision->SetSphereRadius(10.0f);
-	SphereCollision->BodyInstance.SetCollisionProfileName("Projectile");
+	SphereCollision->BodyInstance.SetCollisionProfileName("BlockAll");
 	SphereCollision->OnComponentHit.AddDynamic(this, &AUS_BaseWeaponProjectile::OnHit);
 	
 	RootComponent = SphereCollision;
