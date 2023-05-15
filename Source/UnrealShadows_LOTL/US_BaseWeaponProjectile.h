@@ -20,9 +20,6 @@ class UNREALSHADOWS_LOTL_API AUS_BaseWeaponProjectile : public AActor
 	TObjectPtr<UStaticMeshComponent> Mesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UPawnNoiseEmitterComponent> NoiseEmitter;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UProjectileMovementComponent> ProjectileMovement;
 
 public:	
@@ -37,16 +34,17 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// Add OnHit handler
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse,
+		const FHitResult& Hit);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	FORCEINLINE USphereComponent* GetSpherecollision() const { return SphereCollision; }
-
+	FORCEINLINE USphereComponent* GetSphereCollision() const { return SphereCollision; }
 	FORCEINLINE UStaticMeshComponent* GetMesh() const { return Mesh; }
-
-	FORCEINLINE UPawnNoiseEmitterComponent* GetNoiseEmitter() const { return NoiseEmitter; }
-
 	FORCEINLINE UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
 
 };

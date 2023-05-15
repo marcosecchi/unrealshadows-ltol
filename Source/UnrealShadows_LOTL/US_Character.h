@@ -23,6 +23,11 @@ class UNREALSHADOWS_LOTL_API AUS_Character : public ACharacter
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stealth", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UPawnNoiseEmitterComponent> NoiseEmitter;
+
+	/***************************** ADD THIS CODE ******************************/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UUS_WeaponProjectileComponent> Weapon;
+	/*************************************************************************/
 	
 	// Declare the input mapping context for the basic actions (movement, interaction, etc.)
 

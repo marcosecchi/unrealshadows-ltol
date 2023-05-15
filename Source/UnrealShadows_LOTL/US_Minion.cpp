@@ -52,6 +52,14 @@ AUS_Minion::AUS_Minion()
 	GetCharacterMovement()->MaxWalkSpeed = 200.f;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
+
+	/*************************** ADD THIS ***************************/
+	static ConstructorHelpers::FClassFinder<AUS_BasePickup> SpawnedPickupAsset(TEXT("/Game/Blueprints/PB_GoldCoinPickup"));
+	if (SpawnedPickupAsset.Succeeded())
+	{
+		SpawnedPickup = SpawnedPickupAsset.Class;
+	}
+/******************************************************************/
 }
 
 // Called when the game starts or when spawned

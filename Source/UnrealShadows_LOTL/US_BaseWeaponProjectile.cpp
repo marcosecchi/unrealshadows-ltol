@@ -1,7 +1,7 @@
 #include "US_BaseWeaponProjectile.h"
 
 #include "Components/SphereComponent.h"
-#include "Components/PawnNoiseEmitterComponent.h"
+#include "Engine/DamageEvents.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
 AUS_BaseWeaponProjectile::AUS_BaseWeaponProjectile()
@@ -10,13 +10,17 @@ AUS_BaseWeaponProjectile::AUS_BaseWeaponProjectile()
 	PrimaryActorTick.bCanEverTick = true;
 
 	SphereCollision = CreateDefaultSubobject<USphereComponent>("Collision");
-	RootComponent = SphereCollision;
 	SphereCollision->SetGenerateOverlapEvents(true);
-	SphereCollision->SetSphereRadius(50.0f);
+	SphereCollision->SetSphereRadius(10.0f);
+	SphereCollision->BodyInstance.SetCollisionProfileName("Projectile");
+	SphereCollision->OnComponentHit.AddDynamic(this, &AUS_BaseWeaponProjectile::OnHit);
+	
+	RootComponent = SphereCollision;
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
-	Mesh->SetupAttachment(SphereCollision);
+	Mesh->SetupAttachment(RootComponent);
 	Mesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	Mesh->SetRelativeLocation(FVector(-40.f, 0.f, 0.f));
 	Mesh->SetRelativeRotation(FRotator(-90.f, 0.f, 0.f));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> StaticMesh(TEXT("/Game/KayKit/DungeonElements/dagger_common"));
 	if (StaticMesh.Succeeded())
@@ -24,13 +28,13 @@ AUS_BaseWeaponProjectile::AUS_BaseWeaponProjectile()
 		GetMesh()->SetStaticMesh(StaticMesh.Object);
 	}
 
-	NoiseEmitter = CreateDefaultSubobject<UPawnNoiseEmitterComponent>("NoiseEmitter");
-	NoiseEmitter->NoiseLifetime = 1.f;
-	
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovement");
+	ProjectileMovement->UpdatedComponent = SphereCollision;
 	ProjectileMovement->ProjectileGravityScale = 0;
 	ProjectileMovement->InitialSpeed = 3000;
 	ProjectileMovement->MaxSpeed = 3000;
+	ProjectileMovement->bRotationFollowsVelocity = true;
+	ProjectileMovement->bShouldBounce = false;
 
 	bReplicates = true;
 }
@@ -39,13 +43,24 @@ AUS_BaseWeaponProjectile::AUS_BaseWeaponProjectile()
 void AUS_BaseWeaponProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+//	if(!GetOwner()->HasAuthority()) return;
 }
 
-// Called every frame
+void AUS_BaseWeaponProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Hit: %s"), *OtherActor->GetName()));
+	if (OtherActor && OtherActor != this)
+	{
+		const FDamageEvent Event(UDamageType::StaticClass());
+		OtherActor->TakeDamage(Damage, Event, this->GetInstigatorController(), this);
+	}
+	Destroy();
+}
+
 void AUS_BaseWeaponProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
