@@ -8,6 +8,8 @@
 UUS_WeaponProjectileComponent::UUS_WeaponProjectileComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
+
+	ProjectileClass = AUS_BaseWeaponProjectile::StaticClass();
 }
 
 void UUS_WeaponProjectileComponent::SetProjectileClass(TSubclassOf<AUS_BaseWeaponProjectile> NewProjectileClass)

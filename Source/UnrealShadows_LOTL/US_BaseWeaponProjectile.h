@@ -46,5 +46,4 @@ public:
 	FORCEINLINE USphereComponent* GetSphereCollision() const { return SphereCollision; }
 	FORCEINLINE UStaticMeshComponent* GetMesh() const { return Mesh; }
 	FORCEINLINE UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
-
 };
