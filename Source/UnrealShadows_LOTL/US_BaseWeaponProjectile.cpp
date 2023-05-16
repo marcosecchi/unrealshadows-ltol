@@ -1,5 +1,7 @@
 #include "US_BaseWeaponProjectile.h"
 
+#include "US_Character.h"
+#include "US_CharacterStats.h"
 #include "Components/SphereComponent.h"
 #include "Engine/DamageEvents.h"
 #include "GameFramework/ProjectileMovementComponent.h"
@@ -50,11 +52,22 @@ void AUS_BaseWeaponProjectile::BeginPlay()
 void AUS_BaseWeaponProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Hit: %s"), *OtherActor->GetName()));
+	auto ComputedDamage = Damage;
+	// if cast succeeds, check if the character is the owner of the projectile
+	// if it is, don't deal damage
+	// if it isn't, deal damage
+	// if cast fails, deal damage
+	const auto Character = Cast<AUS_Character>(GetInstigator());
+	if (Character)
+	{
+	GEngine->AddOnScreenDebugMessage(345, 5.f, FColor::Magenta, FString::Printf(TEXT("iS A us_cHARACTER")));
+		ComputedDamage *= Character->GetCharacterStats()->DamageMultiplier;
+	}
+	GEngine->AddOnScreenDebugMessage(345, 5.f, FColor::Red, FString::Printf(TEXT("Damage: %f"), ComputedDamage));
 	if (OtherActor && OtherActor != this)
 	{
 		const FDamageEvent Event(UDamageType::StaticClass());
-		OtherActor->TakeDamage(Damage, Event, this->GetInstigatorController(), this);
+		OtherActor->TakeDamage(ComputedDamage, Event, this->GetInstigatorController(), this);
 	}
 	Destroy();
 }

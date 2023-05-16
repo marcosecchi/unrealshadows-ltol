@@ -46,11 +46,11 @@ void UUS_WeaponProjectileComponent::Throw()
 		const auto Character = Cast<AUS_Character>(GetOwner());
 		const auto ProjectileSpawnLocation = GetComponentLocation();
 		const auto ProjectileSpawnRotation = GetComponentRotation();
+		auto ProjectileSpawnParams = FActorSpawnParameters();
+		ProjectileSpawnParams.Owner = GetOwner();
+		ProjectileSpawnParams.Instigator = Character;
 
-		if (const auto Projectile = GetWorld()->SpawnActor<AUS_BaseWeaponProjectile>(ProjectileClass, ProjectileSpawnLocation, ProjectileSpawnRotation))
-		{
-			Projectile->SetOwner(Character);
-		}
+		GetWorld()->SpawnActor<AUS_BaseWeaponProjectile>(ProjectileClass, ProjectileSpawnLocation, ProjectileSpawnRotation, ProjectileSpawnParams);
 	}
 }
 
