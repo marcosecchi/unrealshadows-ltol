@@ -23,13 +23,13 @@ class UNREALSHADOWS_LOTL_API AUS_Minion : public ACharacter
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Minion Perception", meta = (AllowPrivateAccess = "true"))
 	float AlertRadius = 6000.0f;
 
-	/***************************** ADD THIS *****************************/
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Pickup", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<class AUS_BasePickup> SpawnedPickup;
-
+	// The health of the minion
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Health", meta = (AllowPrivateAccess = "true"))
 	float Health = 5.f;
-	/***********************************************************************/
+
+	// The pickup spawned when the minion is defeated
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Pickup", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class AUS_BasePickup> SpawnedPickup;
 	
 public:
 	// Sets default values for this character's properties
@@ -63,10 +63,8 @@ protected:
 	UFUNCTION()
 	void OnBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
 
-	/***************************** ADD THIS *****************************/
 	UFUNCTION()
 	void OnDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
-	/***********************************************************************/
 
 public:
 
