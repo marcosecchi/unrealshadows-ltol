@@ -27,6 +27,7 @@ public:
 	// Sets default values for this component's properties
 	UUS_WeaponProjectileComponent();
 
+	// Changes the spawned projectile class
 	UFUNCTION(BlueprintCallable, Category = "Projectile")
 	void SetProjectileClass(TSubclassOf<class AUS_BaseWeaponProjectile> NewProjectileClass);
 
@@ -34,8 +35,11 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	// Throw the projectile
 	void Throw();
 
-public:	
-//	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	// Throw the projectile on the server
+	UFUNCTION(Server, Reliable)
+	void Throw_Server();
+	
 };

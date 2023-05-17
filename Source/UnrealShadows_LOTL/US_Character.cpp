@@ -13,7 +13,6 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Components/PawnNoiseEmitterComponent.h"
 
-
 /********************** ADD THIS CODE **********************/
 #include "US_WeaponProjectileComponent.h"
 /***********************************************************/

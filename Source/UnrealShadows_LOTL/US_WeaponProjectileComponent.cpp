@@ -7,21 +7,15 @@
 
 UUS_WeaponProjectileComponent::UUS_WeaponProjectileComponent()
 {
-	PrimaryComponentTick.bCanEverTick = true;
-
 	ProjectileClass = AUS_BaseWeaponProjectile::StaticClass();
-}
-
-void UUS_WeaponProjectileComponent::SetProjectileClass(TSubclassOf<AUS_BaseWeaponProjectile> NewProjectileClass)
-{
-	ProjectileClass = NewProjectileClass;
 }
 
 void UUS_WeaponProjectileComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	const auto Character = Cast<AUS_Character>(GetOwner());
+
+	// Add the base mapping context to the player controller only if we are using a PlayerController
+	const AUS_Character* Character = Cast<AUS_Character>(GetOwner());
 	if(!Character) return;
 	
 	if (const APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))
@@ -36,11 +30,16 @@ void UUS_WeaponProjectileComponent::BeginPlay()
 			EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Triggered, this, &UUS_WeaponProjectileComponent::Throw);
 		}
 	}
-	
 }
 
 void UUS_WeaponProjectileComponent::Throw()
 {
+	Throw_Server();
+}
+
+void UUS_WeaponProjectileComponent:: Throw_Server_Implementation()
+{
+	// Spawn the projectile, setting its owner and instigator as the spawning character
 	if (ProjectileClass)
 	{
 		const auto Character = Cast<AUS_Character>(GetOwner());
@@ -54,8 +53,7 @@ void UUS_WeaponProjectileComponent::Throw()
 	}
 }
 
-//void UUS_WeaponProjectileComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-//{
-//	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-//}
-
+void UUS_WeaponProjectileComponent::SetProjectileClass(TSubclassOf<AUS_BaseWeaponProjectile> NewProjectileClass)
+{
+	ProjectileClass = NewProjectileClass;
+}
