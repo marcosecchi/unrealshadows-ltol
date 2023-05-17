@@ -24,10 +24,8 @@ class UNREALSHADOWS_LOTL_API AUS_Character : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stealth", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UPawnNoiseEmitterComponent> NoiseEmitter;
 
-	/***************************** ADD THIS CODE ******************************/
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UUS_WeaponProjectileComponent> Weapon;
-	/*************************************************************************/
 	
 	// Declare the input mapping context for the basic actions (movement, interaction, etc.)
 
@@ -116,4 +114,7 @@ public:
 
 	// Getter for the character statistics based on the level
 	FORCEINLINE FUS_CharacterStats* GetCharacterStats() const { return CharacterStats; }
+
+	// Getter for the weapon component
+	FORCEINLINE UUS_WeaponProjectileComponent* GetWeapon() const { return Weapon; }
 };

@@ -12,10 +12,7 @@
 #include "US_Interactable.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Components/PawnNoiseEmitterComponent.h"
-
-/********************** ADD THIS CODE **********************/
 #include "US_WeaponProjectileComponent.h"
-/***********************************************************/
 
 AUS_Character::AUS_Character()
 {
@@ -36,11 +33,9 @@ AUS_Character::AUS_Character()
 	NoiseEmitter = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("NoiseEmitter"));
 	NoiseEmitter->NoiseLifetime = 0.01f;
 
-	/************************ ADD THIS CODE ************************/
 	Weapon = CreateDefaultSubobject<UUS_WeaponProjectileComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(RootComponent);
 	Weapon->SetRelativeLocation(FVector(120.f, 70.f, 0.f));
-	/****************************************************************/
 	
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
