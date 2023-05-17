@@ -8,9 +8,7 @@
 
 AUS_BaseWeaponProjectile::AUS_BaseWeaponProjectile()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
+	// Initialize the collision sphere
 	SphereCollision = CreateDefaultSubobject<USphereComponent>("Collision");
 	SphereCollision->SetGenerateOverlapEvents(true);
 	SphereCollision->SetSphereRadius(10.0f);
@@ -19,6 +17,7 @@ AUS_BaseWeaponProjectile::AUS_BaseWeaponProjectile()
 	
 	RootComponent = SphereCollision;
 
+	// Initialize the mesh
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 	Mesh->SetupAttachment(RootComponent);
 	Mesh->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
@@ -30,6 +29,7 @@ AUS_BaseWeaponProjectile::AUS_BaseWeaponProjectile()
 		GetMesh()->SetStaticMesh(StaticMesh.Object);
 	}
 
+	// Initialize the projectile movement
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovement");
 	ProjectileMovement->UpdatedComponent = SphereCollision;
 	ProjectileMovement->ProjectileGravityScale = 0;
@@ -38,29 +38,16 @@ AUS_BaseWeaponProjectile::AUS_BaseWeaponProjectile()
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = false;
 
+	// MAke the projectile replicate
 	bReplicates = true;
-}
-
-// Called when the game starts or when spawned
-void AUS_BaseWeaponProjectile::BeginPlay()
-{
-	Super::BeginPlay();
-
-//	if(!GetOwner()->HasAuthority()) return;
 }
 
 void AUS_BaseWeaponProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	auto ComputedDamage = Damage;
-	// if cast succeeds, check if the character is the owner of the projectile
-	// if it is, don't deal damage
-	// if it isn't, deal damage
-	// if cast fails, deal damage
-	const auto Character = Cast<AUS_Character>(GetInstigator());
-	if (Character)
+	if (const auto Character = Cast<AUS_Character>(GetInstigator()))
 	{
-	GEngine->AddOnScreenDebugMessage(345, 5.f, FColor::Magenta, FString::Printf(TEXT("iS A us_cHARACTER")));
 		ComputedDamage *= Character->GetCharacterStats()->DamageMultiplier;
 	}
 	GEngine->AddOnScreenDebugMessage(345, 5.f, FColor::Red, FString::Printf(TEXT("Damage: %f"), ComputedDamage));
@@ -70,10 +57,5 @@ void AUS_BaseWeaponProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* 
 		OtherActor->TakeDamage(ComputedDamage, Event, this->GetInstigatorController(), this);
 	}
 	Destroy();
-}
-
-void AUS_BaseWeaponProjectile::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 }
 
