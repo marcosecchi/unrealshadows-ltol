@@ -20,7 +20,7 @@ class UNREALSHADOWS_LOTL_API AUS_Minion : public ACharacter
 	FVector PatrolLocation;
 
 	// The radius used to alert other minions once this minion has detected something
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Minion Perception", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Minion AI", meta = (AllowPrivateAccess = "true"))
 	float AlertRadius = 6000.0f;
 
 	// The health of the minion

@@ -37,7 +37,7 @@ void AUS_MinionSpawner::Spawn()
 	SpawnParams.SpawnCollisionHandlingOverride =
 		ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
 	
-	auto Minion =
+	const auto Minion =
 		SpawnableMinions[FMath::RandRange(0, SpawnableMinions.Num() - 1)];
 
 	const auto Rotation =
@@ -49,7 +49,7 @@ void AUS_MinionSpawner::Spawn()
 				FMath::RandRange(-SpawnArea->GetScaledBoxExtent().Y, SpawnArea->GetScaledBoxExtent().Y),
 				0.0f);
 	
-	GetWorld()->SpawnActor<AUS_Minion>(AUS_Minion::StaticClass(), Location, Rotation, SpawnParams);
+	GetWorld()->SpawnActor<AUS_Minion>(Minion, Location, Rotation, SpawnParams);
 }
 
 // Called every frame
