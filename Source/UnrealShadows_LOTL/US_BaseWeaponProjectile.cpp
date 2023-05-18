@@ -45,12 +45,15 @@ AUS_BaseWeaponProjectile::AUS_BaseWeaponProjectile()
 void AUS_BaseWeaponProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	// Compute the damage based on the character stats
 	auto ComputedDamage = Damage;
 	if (const auto Character = Cast<AUS_Character>(GetInstigator()))
 	{
 		ComputedDamage *= Character->GetCharacterStats()->DamageMultiplier;
 	}
-	GEngine->AddOnScreenDebugMessage(345, 5.f, FColor::Red, FString::Printf(TEXT("Damage: %f"), ComputedDamage));
+//	GEngine->AddOnScreenDebugMessage(345, 5.f, FColor::Red, FString::Printf(TEXT("Damage: %f"), ComputedDamage));
+
+	// Apply the damage to the actor that was hit
 	if (OtherActor && OtherActor != this)
 	{
 		const FDamageEvent Event(UDamageType::StaticClass());

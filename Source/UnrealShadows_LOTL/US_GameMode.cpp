@@ -4,10 +4,8 @@
 #include "US_GameState.h"
 #include "US_PlayerController.h"
 #include "US_PlayerState.h"
-/************************************** ADD THIS ****************************************/
 #include "US_Minion.h"
 #include "Kismet/GameplayStatics.h"
-/****************************************************************************************/
 #include "UObject/ConstructorHelpers.h"
 
 AUS_GameMode::AUS_GameMode()
