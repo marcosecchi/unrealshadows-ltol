@@ -35,6 +35,8 @@ void UUS_WeaponProjectileComponent::BeginPlay()
 void UUS_WeaponProjectileComponent::Throw()
 {
 	Throw_Server();
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Throw---"));
+
 }
 
 void UUS_WeaponProjectileComponent:: Throw_Server_Implementation()
@@ -49,9 +51,40 @@ void UUS_WeaponProjectileComponent:: Throw_Server_Implementation()
 		ProjectileSpawnParams.Owner = GetOwner();
 		ProjectileSpawnParams.Instigator = Character;
 
+		/************************** REMOVED CODE **************************/
 		GetWorld()->SpawnActor<AUS_BaseWeaponProjectile>(ProjectileClass, ProjectileSpawnLocation, ProjectileSpawnRotation, ProjectileSpawnParams);
+
+		// Display a message on the screen
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Throw!"));
+		
+		/************************** ADDED CODE **************************/
+	//	Throw_Client();
+		//FTimerHandle TimerHandle;
+		//GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
+	//	{
+	//		GetWorld()->SpawnActor<AUS_BaseWeaponProjectile>(ProjectileClass, ProjectileSpawnLocation, ProjectileSpawnRotation, ProjectileSpawnParams);
+	//	}, 1, false);
+		/****************************** END ******************************/
+
 	}
 }
+
+/************************** ADDED CODE **************************/
+void  UUS_WeaponProjectileComponent::Throw_Client_Implementation()
+{
+	const auto Character = Cast<AUS_Character>(GetOwner());
+//	Character->GetMesh1P()
+	if (ThrowAnimation != nullptr)
+	{
+		// Get the animation object for the arms mesh
+		if (const auto AnimInstance = Character->GetMesh()->GetAnimInstance(); AnimInstance != nullptr)
+		{
+			AnimInstance->Montage_Play(ThrowAnimation, 1.f);
+//			AnimInstance->PlaySlotAnimationAsDynamicMontage()
+		}
+	}	
+}
+/****************************** END ******************************/
 
 void UUS_WeaponProjectileComponent::SetProjectileClass(TSubclassOf<AUS_BaseWeaponProjectile> NewProjectileClass)
 {
