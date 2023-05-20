@@ -36,11 +36,14 @@ AUS_Character::AUS_Character()
 	Weapon = CreateDefaultSubobject<UUS_WeaponProjectileComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(RootComponent);
 	Weapon->SetRelativeLocation(FVector(120.f, 70.f, 0.f));
-	
+	/************************** ADDED CODE **************************/
+	Weapon->SetIsReplicated(true);
+	/************************** END **************************/
+
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
-
+	
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(60.f, 96.0f);
 
