@@ -35,8 +35,6 @@ void UUS_WeaponProjectileComponent::BeginPlay()
 void UUS_WeaponProjectileComponent::Throw()
 {
 	Throw_Server();
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Throw---"));
-
 }
 
 void UUS_WeaponProjectileComponent:: Throw_Server_Implementation()
@@ -44,14 +42,9 @@ void UUS_WeaponProjectileComponent:: Throw_Server_Implementation()
 	// Spawn the projectile, setting its owner and instigator as the spawning character
 	if (ProjectileClass)
 	{
-		/************************** REMOVED CODE **************************/
-//		GetWorld()->SpawnActor<AUS_BaseWeaponProjectile>(ProjectileClass, ProjectileSpawnLocation, ProjectileSpawnRotation, ProjectileSpawnParams);
-
-		// Display a message on the screen
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Throw!"));
-		
-		/************************** ADDED CODE **************************/
+		// Call the client side method to play the animation
 		Throw_Client();
+		// Delay the spawn of the projectile to match the animation
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
 		{
@@ -64,29 +57,24 @@ void UUS_WeaponProjectileComponent:: Throw_Server_Implementation()
 
 			GetWorld()->SpawnActor<AUS_BaseWeaponProjectile>(ProjectileClass, ProjectileSpawnLocation, ProjectileSpawnRotation, ProjectileSpawnParams);
 		}, .4f, false);
-		/****************************** END ******************************/
-
 	}
 }
 
-/************************** ADDED CODE **************************/
 void  UUS_WeaponProjectileComponent::Throw_Client_Implementation()
 {
+	// Play the animation on the client side
 	const auto Character = Cast<AUS_Character>(GetOwner());
-//	Character->GetMesh1P()
 	if (ThrowAnimation != nullptr)
 	{
-		// Get the animation object for the arms mesh
 		if (const auto AnimInstance = Character->GetMesh()->GetAnimInstance(); AnimInstance != nullptr)
 		{
 			AnimInstance->Montage_Play(ThrowAnimation, 1.f);
-//			AnimInstance->PlaySlotAnimationAsDynamicMontage()
 		}
 	}	
 }
-/****************************** END ******************************/
 
 void UUS_WeaponProjectileComponent::SetProjectileClass(TSubclassOf<AUS_BaseWeaponProjectile> NewProjectileClass)
 {
+	// Assign the new projectile class
 	ProjectileClass = NewProjectileClass;
 }

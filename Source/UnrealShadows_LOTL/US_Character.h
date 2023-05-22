@@ -89,6 +89,14 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void SprintEnd_Server();
 
+	/** The function called on the client when the character starts sprinting. */
+	UFUNCTION(NetMulticast, Reliable)
+	void SprintStart_Client();
+
+	/** The function called on the client when the character stops sprinting. */
+	UFUNCTION(NetMulticast, Reliable)
+	void SprintEnd_Client();
+	
 	/** The function called when the character interacts with the environment. */
 	void Interact(const FInputActionValue& Value);
 
