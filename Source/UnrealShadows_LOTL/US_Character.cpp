@@ -156,6 +156,11 @@ void AUS_Character::Interact_Server_Implementation()
 }
 
 /**************************************** ADD THIS ****************************************/
+void AUS_Character::UpdateColors_Server_Implementation()
+{
+	UpdateColors_Client();
+}
+
 void AUS_Character::UpdateColors_Client_Implementation()
 {
 	// Get the gameinstance and cast it to US_GameInstance
@@ -164,6 +169,9 @@ void AUS_Character::UpdateColors_Client_Implementation()
 	GetMesh()->SetMaterial(0, GameInstance->PlayerMaterial0);
 	GetMesh()->SetMaterial(1, GameInstance->PlayerMaterial1);
 	GetMesh()->SetMaterial(2, GameInstance->PlayerMaterial2);
+
+	// Display an integer
+	GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green, FString::Printf(TEXT("Skin Index: %d"), GameInstance->PlayerSkinIndex));
 }
 /****************************************************************************************/
 
@@ -236,9 +244,10 @@ void AUS_Character::BeginPlay()
 	UpdateCharacterStats(1);
 
 	/**************************************** ADD THIS ****************************************/
-	if(GetLocalRole() == ROLE_Authority)
+	if(IsLocallyControlled())
 	{
-		UpdateColors_Client();
+		UpdateColors_Server();
+		GEngine->AddOnScreenDebugMessage(30, 5.f, FColor::Red, TEXT("UpdateColrs"));
 	}
 	/****************************************************************************************/
 }

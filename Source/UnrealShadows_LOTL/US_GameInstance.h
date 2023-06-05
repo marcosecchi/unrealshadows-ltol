@@ -21,6 +21,9 @@ public:
 	FString PlayerName;
 
 	UPROPERTY(BlueprintReadWrite)
+	int32 PlayerSkinIndex;
+
+	UPROPERTY(BlueprintReadWrite)
 	UMaterialInterface* PlayerSkinMaterial;
 
 	UPROPERTY(BlueprintReadWrite)

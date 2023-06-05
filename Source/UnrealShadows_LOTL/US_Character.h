@@ -105,6 +105,9 @@ protected:
 	void Interact_Server();
 
 	/******************************* ADD THIS ********************************/
+	UFUNCTION(Server, Reliable)
+	void UpdateColors_Server();
+
 	UFUNCTION(NetMulticast, Reliable)
 	void UpdateColors_Client();
 
