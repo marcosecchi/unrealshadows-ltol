@@ -20,6 +20,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	FString PlayerName;
 
+	
 	UPROPERTY(BlueprintReadWrite)
 	FString PlayerSkinAssetPath;
 
