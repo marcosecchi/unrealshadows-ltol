@@ -104,6 +104,12 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void Interact_Server();
 
+	/******************************* ADD THIS ********************************/
+	UFUNCTION(NetMulticast, Reliable)
+	void UpdateColors_Client();
+
+	/************************************************************************/
+
 public:	
 	virtual void Tick(float DeltaSeconds) override;
 

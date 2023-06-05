@@ -13,5 +13,24 @@ UCLASS()
 class UNREALSHADOWS_LOTL_API UUS_GameInstance : public UGameInstance
 {
 	GENERATED_BODY()
-	
+
+	/********************************************* ADD THIS *********************************************/
+public:
+	// the player name
+	UPROPERTY(BlueprintReadWrite)
+	FString PlayerName;
+
+	UPROPERTY(BlueprintReadWrite)
+	UMaterialInterface* PlayerSkinMaterial;
+
+	UPROPERTY(BlueprintReadWrite)
+	UMaterialInterface* PlayerMaterial0;
+
+	UPROPERTY(BlueprintReadWrite)
+	UMaterialInterface* PlayerMaterial1;
+
+	UPROPERTY(BlueprintReadWrite)
+	UMaterialInterface* PlayerMaterial2;
+
+	/********************************************* END *********************************************/	
 };

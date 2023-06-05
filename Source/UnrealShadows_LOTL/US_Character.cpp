@@ -8,6 +8,10 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "US_CharacterStats.h"
+/**************************************** ADD THIS ****************************************/
+#include "US_GameInstance.h"
+/******************************************************************************************/
+
 #include "Engine/DataTable.h"
 #include "US_Interactable.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -151,6 +155,18 @@ void AUS_Character::Interact_Server_Implementation()
 	}
 }
 
+/**************************************** ADD THIS ****************************************/
+void AUS_Character::UpdateColors_Client_Implementation()
+{
+	// Get the gameinstance and cast it to US_GameInstance
+	const auto GameInstance = Cast<UUS_GameInstance>(GetWorld()->GetGameInstance());
+	GetMesh()->SetMaterial(4, GameInstance->PlayerSkinMaterial);
+	GetMesh()->SetMaterial(0, GameInstance->PlayerMaterial0);
+	GetMesh()->SetMaterial(1, GameInstance->PlayerMaterial1);
+	GetMesh()->SetMaterial(2, GameInstance->PlayerMaterial2);
+}
+/****************************************************************************************/
+
 void AUS_Character::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
@@ -218,6 +234,13 @@ void AUS_Character::BeginPlay()
 	}
 
 	UpdateCharacterStats(1);
+
+	/**************************************** ADD THIS ****************************************/
+	if(GetLocalRole() == ROLE_Authority)
+	{
+		UpdateColors_Client();
+	}
+	/****************************************************************************************/
 }
 
 // Called to bind functionality to input
