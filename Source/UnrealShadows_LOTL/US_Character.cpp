@@ -165,13 +165,20 @@ void AUS_Character::UpdateColors_Client_Implementation()
 {
 	// Get the gameinstance and cast it to US_GameInstance
 	const auto GameInstance = Cast<UUS_GameInstance>(GetWorld()->GetGameInstance());
-	GetMesh()->SetMaterial(4, GameInstance->PlayerSkinMaterial);
-	GetMesh()->SetMaterial(0, GameInstance->PlayerMaterial0);
-	GetMesh()->SetMaterial(1, GameInstance->PlayerMaterial1);
-	GetMesh()->SetMaterial(2, GameInstance->PlayerMaterial2);
+	if(GameInstance == nullptr) return;
+//	static ConstructorHelpers::FObjectFinder<UMaterialInterface> SkinAsset(*(GameInstance->PlayerSkinAssetPath));
+//	if (SkinAsset.Succeeded())
+//	{
+//		GetMesh()->SetMaterial(4, SkinAsset.Object);
+//	}
+
+//	GetMesh()->SetMaterial(4, GameInstance->PlayerSkinMaterial);
+//	GetMesh()->SetMaterial(0, GameInstance->PlayerMaterial0);
+//	GetMesh()->SetMaterial(1, GameInstance->PlayerMaterial1);
+//	GetMesh()->SetMaterial(2, GameInstance->PlayerMaterial2);
 
 	// Display an integer
-	GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green, FString::Printf(TEXT("Skin Index: %d"), GameInstance->PlayerSkinIndex));
+//	GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green, FString::Printf(TEXT("Skin Index: %d"), GameInstance->PlayerSkinIndex));
 }
 /****************************************************************************************/
 
@@ -247,7 +254,12 @@ void AUS_Character::BeginPlay()
 	if(IsLocallyControlled())
 	{
 		UpdateColors_Server();
-		GEngine->AddOnScreenDebugMessage(30, 5.f, FColor::Red, TEXT("UpdateColrs"));
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Locally Controlled"));
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Remote Controlled"));
+		
 	}
 	/****************************************************************************************/
 }

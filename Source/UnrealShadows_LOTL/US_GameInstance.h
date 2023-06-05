@@ -21,19 +21,16 @@ public:
 	FString PlayerName;
 
 	UPROPERTY(BlueprintReadWrite)
-	int32 PlayerSkinIndex;
+	FString PlayerSkinAssetPath;
 
 	UPROPERTY(BlueprintReadWrite)
-	UMaterialInterface* PlayerSkinMaterial;
+	FString PlayerMaterial0AssetPath;
 
 	UPROPERTY(BlueprintReadWrite)
-	UMaterialInterface* PlayerMaterial0;
+	FString PlayerMaterial1AssetPath;
 
 	UPROPERTY(BlueprintReadWrite)
-	UMaterialInterface* PlayerMaterial1;
-
-	UPROPERTY(BlueprintReadWrite)
-	UMaterialInterface* PlayerMaterial2;
-
+	FString PlayerMaterial2AssetPath;
+	
 	/********************************************* END *********************************************/	
 };
