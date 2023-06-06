@@ -10,6 +10,7 @@
 #include "US_CharacterStats.h"
 /**************************************** ADD THIS ****************************************/
 #include "US_GameInstance.h"
+#include "US_CharacterSkins.h"
 /******************************************************************************************/
 
 #include "Engine/DataTable.h"
@@ -156,29 +157,38 @@ void AUS_Character::Interact_Server_Implementation()
 }
 
 /**************************************** ADD THIS ****************************************/
-void AUS_Character::UpdateColors_Server_Implementation()
+void AUS_Character::UpdateCharacterSkin_Server_Implementation()
 {
-	UpdateColors_Client();
+	UpdateCharacterSkin_Client();
 }
 
-void AUS_Character::UpdateColors_Client_Implementation()
+void AUS_Character::UpdateCharacterSkin_Client_Implementation()
 {
-	// Get the gameinstance and cast it to US_GameInstance
 	const auto GameInstance = Cast<UUS_GameInstance>(GetWorld()->GetGameInstance());
 	if(GameInstance == nullptr) return;
-//	static ConstructorHelpers::FObjectFinder<UMaterialInterface> SkinAsset(*(GameInstance->PlayerSkinAssetPath));
-//	if (SkinAsset.Succeeded())
-//	{
-//		GetMesh()->SetMaterial(4, SkinAsset.Object);
-//	}
 
-//	GetMesh()->SetMaterial(4, GameInstance->PlayerSkinMaterial);
-//	GetMesh()->SetMaterial(0, GameInstance->PlayerMaterial0);
-//	GetMesh()->SetMaterial(1, GameInstance->PlayerMaterial1);
-//	GetMesh()->SetMaterial(2, GameInstance->PlayerMaterial2);
+	GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green, FString::Printf(TEXT("Skin Index: %d"), GameInstance->SkinIndex));
 
-	// Display an integer
-//	GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green, FString::Printf(TEXT("Skin Index: %d"), GameInstance->PlayerSkinIndex));
+	if(CharacterSkinDataTable)
+	{
+		auto SkinIndex = GameInstance->SkinIndex;
+		// Get all the rows from the data table
+		TArray<FUS_CharacterSkins*> CharacterSkinsRows;
+		CharacterSkinDataTable->GetAllRows<FUS_CharacterSkins>(TEXT("US_Character"), CharacterSkinsRows);
+
+		// Get the row from the data table
+		if(CharacterSkinsRows.Num() > 0)
+		{
+			
+			const auto Index = FMath::Clamp(SkinIndex, 0, CharacterSkinsRows.Num() - 1);
+			CharacterSkin = CharacterSkinsRows[Index];
+
+			GetMesh()->SetMaterial(4, CharacterSkin->Material4);
+			GetMesh()->SetMaterial(0, CharacterSkin->Material0);
+			GetMesh()->SetMaterial(1, CharacterSkin->Material1);
+			GetMesh()->SetMaterial(2, CharacterSkin->Material2);
+		}
+	}
 }
 /****************************************************************************************/
 
@@ -253,7 +263,7 @@ void AUS_Character::BeginPlay()
 	/**************************************** ADD THIS ****************************************/
 	if(IsLocallyControlled())
 	{
-		UpdateColors_Server();
+		UpdateCharacterSkin_Server();
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Locally Controlled"));
 	}
 	else

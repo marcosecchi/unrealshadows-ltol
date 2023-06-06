@@ -61,6 +61,15 @@ class UNREALSHADOWS_LOTL_API AUS_Character : public ACharacter
 	UPROPERTY()
 	AActor* InteractableActor;
 
+	/******************************** ADD THIS ********************************/
+	/** A reference to the data table containing the character stats. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Data", meta = (AllowPrivateAccess = "true"))
+	UDataTable* CharacterSkinDataTable;
+
+	/** The character skin, retrieved from the data table. */
+	struct FUS_CharacterSkins* CharacterSkin;
+	/*************************************************************************/
+	
 public:
 	AUS_Character();
 
@@ -106,10 +115,10 @@ protected:
 
 	/******************************* ADD THIS ********************************/
 	UFUNCTION(Server, Reliable)
-	void UpdateColors_Server();
+	void UpdateCharacterSkin_Server();
 
 	UFUNCTION(NetMulticast, Reliable)
-	void UpdateColors_Client();
+	void UpdateCharacterSkin_Client();
 
 	/************************************************************************/
 
@@ -134,4 +143,9 @@ public:
 
 	// Getter for the weapon component
 	FORCEINLINE UUS_WeaponProjectileComponent* GetWeapon() const { return Weapon; }
+
+	/******************************* ADD THIS ********************************/
+	// Getter for the character skins
+	FORCEINLINE FUS_CharacterSkins* GetCharacterSkins() const { return CharacterSkin; }
+	/************************************************************************/
 };
