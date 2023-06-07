@@ -160,9 +160,9 @@ void AUS_Character::Interact_Server_Implementation()
 /**************************************** ADD THIS ****************************************/
 void AUS_Character::UpdateCharacterSkin(const int32 SkinIndex)
 {
-//	UpdateCharacterSkin_Server(SkinIndex);
+	UpdateCharacterSkin_Server(SkinIndex);
 
-	
+/*	
 	if(CharacterSkinDataTable)
 	{
 		// Get all the rows from the data table
@@ -182,6 +182,7 @@ void AUS_Character::UpdateCharacterSkin(const int32 SkinIndex)
 			GetMesh()->SetMaterial(2, CharacterSkin->Material2);
 		}
 	}
+	*/
 }
 
 void AUS_Character::UpdateCharacterSkin_Server_Implementation(int32 SkinIndex)
@@ -283,16 +284,19 @@ void AUS_Character::BeginPlay()
 
 	UpdateCharacterStats(1);
 	/**************************************** ADD THIS ****************************************/
+	
+	const auto State = Cast<AUS_PlayerState>(GetPlayerState());
+	if(State == nullptr) return;
+	State->OnSkinChanged.AddDynamic(this, &AUS_Character::UpdateCharacterSkin);
+	
 	if(IsLocallyControlled())
 	{
 		const auto GameInstance = Cast<UUS_GameInstance>(GetWorld()->GetGameInstance());
 		if(GameInstance == nullptr) return;
 		const auto SkinIndex = GameInstance->SkinIndex;
-
-		const auto State = Cast<AUS_PlayerState>(GetPlayerState());
-		if(State == nullptr) return;
-		State->SetSkinIndex(SkinIndex);
+		State->SkinIndex = SkinIndex;
 	}
+	UpdateCharacterSkin(State->SkinIndex);
 	/****************************************************************************************/
 }
 
