@@ -11,6 +11,7 @@
 /**************************************** ADD THIS ****************************************/
 #include "US_GameInstance.h"
 #include "US_CharacterSkins.h"
+#include "Net/UnrealNetwork.h"
 /******************************************************************************************/
 
 #include "Engine/DataTable.h"
@@ -158,7 +159,7 @@ void AUS_Character::Interact_Server_Implementation()
 }
 
 /**************************************** ADD THIS ****************************************/
-void AUS_Character::UpdateCharacterSkin(const int32 SkinIndex)
+void AUS_Character::UpdateCharacterSkin()
 {
 	// Display a message
 GEngine->AddOnScreenDebugMessage(30, 5.f, FColor::Red, FString::Printf(TEXT("UpdateCharacterSkin: %d"), SkinIndex));
@@ -173,7 +174,6 @@ GEngine->AddOnScreenDebugMessage(30, 5.f, FColor::Red, FString::Printf(TEXT("Upd
 		// Get the row from the data table
 		if(CharacterSkinsRows.Num() > 0)
 		{
-			
 			const auto Index = FMath::Clamp(SkinIndex, 0, CharacterSkinsRows.Num() - 1);
 			CharacterSkin = CharacterSkinsRows[Index];
 
@@ -185,35 +185,18 @@ GEngine->AddOnScreenDebugMessage(30, 5.f, FColor::Red, FString::Printf(TEXT("Upd
 	}
 }
 
-void AUS_Character::UpdateCharacterSkin_Server_Implementation(int32 SkinIndex)
+void AUS_Character::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	UpdateCharacterSkin_Client(SkinIndex);
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AUS_Character, SkinIndex);
 }
 
-void AUS_Character::UpdateCharacterSkin_Client_Implementation(int32 SkinIndex)
+void AUS_Character::OnRep_SkinChanged(int32 OldValue)
 {
-
-
-	if(CharacterSkinDataTable)
-	{
-		// Get all the rows from the data table
-		TArray<FUS_CharacterSkins*> CharacterSkinsRows;
-		CharacterSkinDataTable->GetAllRows<FUS_CharacterSkins>(TEXT("US_Character"), CharacterSkinsRows);
-
-		// Get the row from the data table
-		if(CharacterSkinsRows.Num() > 0)
-		{
-			
-			const auto Index = FMath::Clamp(SkinIndex, 0, CharacterSkinsRows.Num() - 1);
-			CharacterSkin = CharacterSkinsRows[Index];
-
-			GetMesh()->SetMaterial(4, CharacterSkin->Material4);
-			GetMesh()->SetMaterial(0, CharacterSkin->Material0);
-			GetMesh()->SetMaterial(1, CharacterSkin->Material1);
-			GetMesh()->SetMaterial(2, CharacterSkin->Material2);
-		}
-	}
+	UpdateCharacterSkin();
 }
+
 /****************************************************************************************/
 
 void AUS_Character::Tick(float DeltaSeconds)
@@ -288,18 +271,17 @@ void AUS_Character::BeginPlay()
 	
 	const auto PlayerStateCast = Cast<AUS_PlayerState>(GetPlayerState());
 	if(PlayerStateCast == nullptr) return;
-	PlayerStateCast->OnSkinChanged.AddDynamic(this, &AUS_Character::UpdateCharacterSkin);
 
 	// Display a message
-	GEngine->AddOnScreenDebugMessage(31, 5.f, FColor::Red, FString::Printf(TEXT("BeginPlay: %d"), PlayerStateCast->GetSkinIndex()));
+	GEngine->AddOnScreenDebugMessage(31, 5.f, FColor::Red, FString::Printf(TEXT("BeginPlay: %d"),SkinIndex));
 	if(IsLocallyControlled())
 	{
 		const auto GameInstanceCast = Cast<UUS_GameInstance>(GetWorld()->GetGameInstance());
 		if(GameInstanceCast == nullptr) return;
-		PlayerStateCast->SetSkinIndex(GameInstanceCast->SkinIndex);
+		SkinIndex = GameInstanceCast->SkinIndex;
 	}
-	GEngine->AddOnScreenDebugMessage(32, 5.f, FColor::Red, FString::Printf(TEXT("BeginPlay: %d"), PlayerStateCast->GetSkinIndex()));
-	UpdateCharacterSkin(PlayerStateCast->GetSkinIndex());
+	GEngine->AddOnScreenDebugMessage(32, 5.f, FColor::Red, FString::Printf(TEXT("BeginPlay: %d"), SkinIndex));
+	UpdateCharacterSkin();
 	/****************************************************************************************/
 }
 

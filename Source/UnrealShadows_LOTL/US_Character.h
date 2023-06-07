@@ -113,15 +113,17 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void Interact_Server();
 
-	/******************************* ADD THIS ********************************/
+	/************************************* ADD THIS *************************************/
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, ReplicatedUsing="OnRep_SkinChanged", Category = "Skin")
+	int32 SkinIndex = 0;
 
-	UFUNCTION(Server, Reliable)
-	void UpdateCharacterSkin_Server(int32 SkinIndex);
+	UFUNCTION()
+	void OnRep_SkinChanged(int32 OldValue);
 
-	UFUNCTION(NetMulticast, Reliable)
-	void UpdateCharacterSkin_Client(int32 SkinIndex);
+	UFUNCTION()
+	void UpdateCharacterSkin();
 
-	/************************************************************************/
+	/************************************* END *************************************/
 
 public:	
 	virtual void Tick(float DeltaSeconds) override;
@@ -131,11 +133,6 @@ public:
 	/** Updates the character stats based on the level. */
 	void UpdateCharacterStats(int32 CharacterLevel);
 
-	/******************************* ADD THIS ********************************/
-	UFUNCTION(BlueprintCallable)
-	void UpdateCharacterSkin(int32 SkinIndex);
-	/************************************************************************/
-	
 	// Getters for the camera components
 	
 	/** Returns the SpringArmComponent used to connect the Camera to the character Capsule component. */
@@ -153,5 +150,8 @@ public:
 	/******************************* ADD THIS ********************************/
 	// Getter for the character skins
 	FORCEINLINE FUS_CharacterSkins* GetCharacterSkins() const { return CharacterSkin; }
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	/************************************************************************/
 };

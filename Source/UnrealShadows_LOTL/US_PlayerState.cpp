@@ -34,25 +34,6 @@ void AUS_PlayerState::OnRep_CharacterLevelUp(int32 OldValue) const
 	OnCharacterLevelUp.Broadcast(CharacterLevel);
 }
 
-/************************************* ADD THIS *************************************/
-void AUS_PlayerState::OnRep_SkinChanged(int32 OldValue) const
-{
-	OnSkinChanged.Broadcast(SkinIndex);
-}
-
-void AUS_PlayerState::SetSkinIndex(int32 Value)
-{
-	SkinIndex = Value;
-	OnSkinChanged.Broadcast(SkinIndex);
-}
-
-int32 AUS_PlayerState::GetSkinIndex()
-{
-	return SkinIndex;
-}
-
-/************************************* END *************************************/
-
 /**
  * Called to get the list of replicated properties
  * @param OutLifetimeProps - List of replicated properties
@@ -63,7 +44,4 @@ void AUS_PlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 
 	DOREPLIFETIME_CONDITION(AUS_PlayerState, Xp, COND_OwnerOnly);
 	DOREPLIFETIME_CONDITION(AUS_PlayerState, CharacterLevel, COND_OwnerOnly);
-	/************************************* ADD THIS *************************************/
-	DOREPLIFETIME(AUS_PlayerState, SkinIndex);
-	/************************************* END *************************************/
 }
