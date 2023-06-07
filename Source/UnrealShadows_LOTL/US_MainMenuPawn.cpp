@@ -43,7 +43,10 @@ void AUS_MainMenuPawn::BeginPlay()
 {
 	Super::BeginPlay();
 
-	RandomizeCharacterSkin();
+	if(IsLocallyControlled())
+	{
+		RandomizeCharacterSkin();
+	}
 }
 
 void AUS_MainMenuPawn::RandomizeCharacterSkin()

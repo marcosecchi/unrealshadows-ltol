@@ -39,6 +39,18 @@ void AUS_PlayerState::OnRep_SkinChanged(int32 OldValue) const
 {
 	OnSkinChanged.Broadcast(SkinIndex);
 }
+
+void AUS_PlayerState::SetSkinIndex(int32 Value)
+{
+	SkinIndex = Value;
+	OnSkinChanged.Broadcast(SkinIndex);
+}
+
+int32 AUS_PlayerState::GetSkinIndex()
+{
+	return SkinIndex;
+}
+
 /************************************* END *************************************/
 
 /**

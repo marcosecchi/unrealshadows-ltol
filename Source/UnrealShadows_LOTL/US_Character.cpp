@@ -283,23 +283,23 @@ void AUS_Character::BeginPlay()
 	}
 
 	UpdateCharacterStats(1);
+	
 	/**************************************** ADD THIS ****************************************/
 	
-	const auto State = Cast<AUS_PlayerState>(GetPlayerState());
-	if(State == nullptr) return;
-	State->OnSkinChanged.AddDynamic(this, &AUS_Character::UpdateCharacterSkin);
+	const auto PlayerStateCast = Cast<AUS_PlayerState>(GetPlayerState());
+	if(PlayerStateCast == nullptr) return;
+	PlayerStateCast->OnSkinChanged.AddDynamic(this, &AUS_Character::UpdateCharacterSkin);
 
 	// Display a message
-	GEngine->AddOnScreenDebugMessage(31, 5.f, FColor::Red, FString::Printf(TEXT("BeginPlay: %d"), State->SkinIndex));
+	GEngine->AddOnScreenDebugMessage(31, 5.f, FColor::Red, FString::Printf(TEXT("BeginPlay: %d"), PlayerStateCast->GetSkinIndex()));
 	if(IsLocallyControlled())
 	{
-		const auto GameInstance = Cast<UUS_GameInstance>(GetWorld()->GetGameInstance());
-		if(GameInstance == nullptr) return;
-		const auto SkinIndex = GameInstance->SkinIndex;
-		State->SkinIndex = SkinIndex;
+		const auto GameInstanceCast = Cast<UUS_GameInstance>(GetWorld()->GetGameInstance());
+		if(GameInstanceCast == nullptr) return;
+		PlayerStateCast->SetSkinIndex(GameInstanceCast->SkinIndex);
 	}
-	GEngine->AddOnScreenDebugMessage(32, 5.f, FColor::Red, FString::Printf(TEXT("BeginPlay: %d"), State->SkinIndex));
-	UpdateCharacterSkin(State->SkinIndex);
+	GEngine->AddOnScreenDebugMessage(32, 5.f, FColor::Red, FString::Printf(TEXT("BeginPlay: %d"), PlayerStateCast->GetSkinIndex()));
+	UpdateCharacterSkin(PlayerStateCast->GetSkinIndex());
 	/****************************************************************************************/
 }
 
