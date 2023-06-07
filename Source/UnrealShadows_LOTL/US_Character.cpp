@@ -160,9 +160,10 @@ void AUS_Character::Interact_Server_Implementation()
 /**************************************** ADD THIS ****************************************/
 void AUS_Character::UpdateCharacterSkin(const int32 SkinIndex)
 {
-	UpdateCharacterSkin_Server(SkinIndex);
+	// Display a message
+GEngine->AddOnScreenDebugMessage(30, 5.f, FColor::Red, FString::Printf(TEXT("UpdateCharacterSkin: %d"), SkinIndex));
 
-/*	
+	
 	if(CharacterSkinDataTable)
 	{
 		// Get all the rows from the data table
@@ -182,7 +183,6 @@ void AUS_Character::UpdateCharacterSkin(const int32 SkinIndex)
 			GetMesh()->SetMaterial(2, CharacterSkin->Material2);
 		}
 	}
-	*/
 }
 
 void AUS_Character::UpdateCharacterSkin_Server_Implementation(int32 SkinIndex)
@@ -288,7 +288,9 @@ void AUS_Character::BeginPlay()
 	const auto State = Cast<AUS_PlayerState>(GetPlayerState());
 	if(State == nullptr) return;
 	State->OnSkinChanged.AddDynamic(this, &AUS_Character::UpdateCharacterSkin);
-	
+
+	// Display a message
+	GEngine->AddOnScreenDebugMessage(31, 5.f, FColor::Red, FString::Printf(TEXT("BeginPlay: %d"), State->SkinIndex));
 	if(IsLocallyControlled())
 	{
 		const auto GameInstance = Cast<UUS_GameInstance>(GetWorld()->GetGameInstance());
@@ -296,6 +298,7 @@ void AUS_Character::BeginPlay()
 		const auto SkinIndex = GameInstance->SkinIndex;
 		State->SkinIndex = SkinIndex;
 	}
+	GEngine->AddOnScreenDebugMessage(32, 5.f, FColor::Red, FString::Printf(TEXT("BeginPlay: %d"), State->SkinIndex));
 	UpdateCharacterSkin(State->SkinIndex);
 	/****************************************************************************************/
 }
