@@ -269,18 +269,17 @@ void AUS_Character::BeginPlay()
 	
 	/**************************************** ADD THIS ****************************************/
 	
-	const auto PlayerStateCast = Cast<AUS_PlayerState>(GetPlayerState());
-	if(PlayerStateCast == nullptr) return;
+//	const auto PlayerStateCast = Cast<AUS_PlayerState>(GetPlayerState());
+//	if(PlayerStateCast == nullptr) return;
 
 	// Display a message
-	GEngine->AddOnScreenDebugMessage(31, 5.f, FColor::Red, FString::Printf(TEXT("BeginPlay: %d"),SkinIndex));
 	if(IsLocallyControlled())
 	{
-		const auto GameInstanceCast = Cast<UUS_GameInstance>(GetWorld()->GetGameInstance());
-		if(GameInstanceCast == nullptr) return;
-		SkinIndex = GameInstanceCast->SkinIndex;
+		if(const auto GameInstanceCast = Cast<UUS_GameInstance>(GetWorld()->GetGameInstance()); GameInstanceCast != nullptr)
+		{
+			SkinIndex = GameInstanceCast->SkinIndex;
+		}
 	}
-	GEngine->AddOnScreenDebugMessage(32, 5.f, FColor::Red, FString::Printf(TEXT("BeginPlay: %d"), SkinIndex));
 	UpdateCharacterSkin();
 	/****************************************************************************************/
 }
