@@ -115,10 +115,10 @@ protected:
 
 	/******************************* ADD THIS ********************************/
 	UFUNCTION(Server, Reliable)
-	void UpdateCharacterSkin_Server();
+	void UpdateCharacterSkin_Server(int32 SkinIndex);
 
 	UFUNCTION(NetMulticast, Reliable)
-	void UpdateCharacterSkin_Client();
+	void UpdateCharacterSkin_Client(int32 SkinIndex);
 
 	/************************************************************************/
 

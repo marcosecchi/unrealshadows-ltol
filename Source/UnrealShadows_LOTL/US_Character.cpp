@@ -157,21 +157,18 @@ void AUS_Character::Interact_Server_Implementation()
 }
 
 /**************************************** ADD THIS ****************************************/
-void AUS_Character::UpdateCharacterSkin_Server_Implementation()
+void AUS_Character::UpdateCharacterSkin_Server_Implementation(int32 SkinIndex)
 {
-	UpdateCharacterSkin_Client();
+	UpdateCharacterSkin_Client(SkinIndex);
 }
 
-void AUS_Character::UpdateCharacterSkin_Client_Implementation()
+void AUS_Character::UpdateCharacterSkin_Client_Implementation(int32 SkinIndex)
 {
-	const auto GameInstance = Cast<UUS_GameInstance>(GetWorld()->GetGameInstance());
-	if(GameInstance == nullptr) return;
 
-	GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green, FString::Printf(TEXT("Skin Index: %d"), GameInstance->SkinIndex));
+	GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green, FString::Printf(TEXT("Skin Index: %d"), SkinIndex));
 
 	if(CharacterSkinDataTable)
 	{
-		auto SkinIndex = GameInstance->SkinIndex;
 		// Get all the rows from the data table
 		TArray<FUS_CharacterSkins*> CharacterSkinsRows;
 		CharacterSkinDataTable->GetAllRows<FUS_CharacterSkins>(TEXT("US_Character"), CharacterSkinsRows);
@@ -263,13 +260,10 @@ void AUS_Character::BeginPlay()
 	/**************************************** ADD THIS ****************************************/
 	if(IsLocallyControlled())
 	{
-		UpdateCharacterSkin_Server();
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Locally Controlled"));
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Remote Controlled"));
-		
+		const auto GameInstance = Cast<UUS_GameInstance>(GetWorld()->GetGameInstance());
+		if(GameInstance == nullptr) return;
+		auto SkinIndex = GameInstance->SkinIndex;
+		UpdateCharacterSkin_Server(SkinIndex);
 	}
 	/****************************************************************************************/
 }
