@@ -114,6 +114,7 @@ protected:
 	void Interact_Server();
 
 	/******************************* ADD THIS ********************************/
+
 	UFUNCTION(Server, Reliable)
 	void UpdateCharacterSkin_Server(int32 SkinIndex);
 
@@ -130,6 +131,11 @@ public:
 	/** Updates the character stats based on the level. */
 	void UpdateCharacterStats(int32 CharacterLevel);
 
+	/******************************* ADD THIS ********************************/
+	UFUNCTION(BlueprintCallable)
+	void UpdateCharacterSkin(int32 SkinIndex);
+	/************************************************************************/
+	
 	// Getters for the camera components
 	
 	/** Returns the SpringArmComponent used to connect the Camera to the character Capsule component. */

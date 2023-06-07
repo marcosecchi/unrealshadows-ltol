@@ -14,7 +14,6 @@ public:
 	// the player name
 	UPROPERTY(BlueprintReadWrite)
 	int32 SkinIndex;
-
 	
 	/********************************************* END *********************************************/	
 };

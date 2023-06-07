@@ -57,9 +57,8 @@ void AUS_MainMenuPawn::RandomizeCharacterSkin()
 		// Get the row from the data table
 		if(CharacterSkinsRows.Num() > 0)
 		{
-			
 			const auto NewIndex = FMath::RandRange(0, CharacterSkinsRows.Num() - 1);
-			CharacterSkin = CharacterSkinsRows[NewIndex];
+			CharacterSkin = CharacterSkinsRows [NewIndex];
 
 			Mesh->SetMaterial(4, CharacterSkinsRows[NewIndex]->Material4);
 			Mesh->SetMaterial(0, CharacterSkinsRows[NewIndex]->Material0);
@@ -67,7 +66,7 @@ void AUS_MainMenuPawn::RandomizeCharacterSkin()
 			Mesh->SetMaterial(2, CharacterSkinsRows[NewIndex]->Material2);
 
 			// Get the GameInstance
-			if (auto GameInstance = Cast<UUS_GameInstance>(GetGameInstance()))
+			if (const auto GameInstance = Cast<UUS_GameInstance>(GetGameInstance()))
 			{
 				GameInstance->SkinIndex = NewIndex;
 			}

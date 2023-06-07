@@ -9,13 +9,13 @@ void AUS_PlayerState::AddXp(const int32 Value)
 	Xp += Value;
 	OnXpChanged.Broadcast(Xp);
 
-	 GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Yellow, FString::Printf(TEXT("Total Xp: %d"), Value));
+	 // GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Yellow, FString::Printf(TEXT("Total Xp: %d"), Value));
 
 	if (const auto Character = Cast<AUS_Character>(GetPawn()))
 	{
 		if(Character->GetCharacterStats()->NextLevelXp < Xp)
 		{
-			GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Red, TEXT("Level Up!"));
+		//	GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Red, TEXT("Level Up!"));
 			
 			CharacterLevel++;
 			OnCharacterLevelUp.Broadcast(CharacterLevel);
@@ -34,6 +34,24 @@ void AUS_PlayerState::OnRep_CharacterLevelUp(int32 OldValue) const
 	OnCharacterLevelUp.Broadcast(CharacterLevel);
 }
 
+/************************************* ADD THIS *************************************/
+void AUS_PlayerState::OnRep_SkinChanged(int32 OldValue) const
+{
+	OnCharacterSkinChanged.Broadcast(SkinIndex);
+}
+
+void AUS_PlayerState::SetSkinIndex(int32 Value)
+{
+	SkinIndex = Value;
+	OnCharacterSkinChanged.Broadcast(SkinIndex);
+	if (const auto Character = Cast<AUS_Character>(GetPawn()))
+	{
+		Character->UpdateCharacterSkin(SkinIndex);
+	}
+}
+/************************************* END *************************************/
+
+
 /**
  * Called to get the list of replicated properties
  * @param OutLifetimeProps - List of replicated properties
@@ -44,4 +62,7 @@ void AUS_PlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 
 	DOREPLIFETIME_CONDITION(AUS_PlayerState, Xp, COND_OwnerOnly);
 	DOREPLIFETIME_CONDITION(AUS_PlayerState, CharacterLevel, COND_OwnerOnly);
+/************************************* ADD THIS *************************************/
+	DOREPLIFETIME_CONDITION(AUS_PlayerState, SkinIndex, COND_OwnerOnly);
+	/************************************* END *************************************/
 }

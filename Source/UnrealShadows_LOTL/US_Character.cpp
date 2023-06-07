@@ -15,6 +15,7 @@
 
 #include "Engine/DataTable.h"
 #include "US_Interactable.h"
+#include "US_PlayerState.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Components/PawnNoiseEmitterComponent.h"
 #include "US_WeaponProjectileComponent.h"
@@ -157,6 +158,32 @@ void AUS_Character::Interact_Server_Implementation()
 }
 
 /**************************************** ADD THIS ****************************************/
+void AUS_Character::UpdateCharacterSkin(const int32 SkinIndex)
+{
+//	UpdateCharacterSkin_Server(SkinIndex);
+
+	
+	if(CharacterSkinDataTable)
+	{
+		// Get all the rows from the data table
+		TArray<FUS_CharacterSkins*> CharacterSkinsRows;
+		CharacterSkinDataTable->GetAllRows<FUS_CharacterSkins>(TEXT("US_Character"), CharacterSkinsRows);
+
+		// Get the row from the data table
+		if(CharacterSkinsRows.Num() > 0)
+		{
+			
+			const auto Index = FMath::Clamp(SkinIndex, 0, CharacterSkinsRows.Num() - 1);
+			CharacterSkin = CharacterSkinsRows[Index];
+
+			GetMesh()->SetMaterial(4, CharacterSkin->Material4);
+			GetMesh()->SetMaterial(0, CharacterSkin->Material0);
+			GetMesh()->SetMaterial(1, CharacterSkin->Material1);
+			GetMesh()->SetMaterial(2, CharacterSkin->Material2);
+		}
+	}
+}
+
 void AUS_Character::UpdateCharacterSkin_Server_Implementation(int32 SkinIndex)
 {
 	UpdateCharacterSkin_Client(SkinIndex);
@@ -165,7 +192,6 @@ void AUS_Character::UpdateCharacterSkin_Server_Implementation(int32 SkinIndex)
 void AUS_Character::UpdateCharacterSkin_Client_Implementation(int32 SkinIndex)
 {
 
-	GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green, FString::Printf(TEXT("Skin Index: %d"), SkinIndex));
 
 	if(CharacterSkinDataTable)
 	{
@@ -256,14 +282,16 @@ void AUS_Character::BeginPlay()
 	}
 
 	UpdateCharacterStats(1);
-
 	/**************************************** ADD THIS ****************************************/
 	if(IsLocallyControlled())
 	{
 		const auto GameInstance = Cast<UUS_GameInstance>(GetWorld()->GetGameInstance());
 		if(GameInstance == nullptr) return;
-		auto SkinIndex = GameInstance->SkinIndex;
-		UpdateCharacterSkin_Server(SkinIndex);
+		const auto SkinIndex = GameInstance->SkinIndex;
+
+		const auto State = Cast<AUS_PlayerState>(GetPlayerState());
+		if(State == nullptr) return;
+		State->SetSkinIndex(SkinIndex);
 	}
 	/****************************************************************************************/
 }
