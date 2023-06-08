@@ -72,7 +72,6 @@ AUS_Character::AUS_Character()
 void AUS_Character::Move(const FInputActionValue& Value)
 {
 	const auto MovementVector = Value.Get<FVector2D>();
-//	GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Yellow, FString::Printf(TEXT("MovementVector: %s"), *MovementVector.ToString()));
 
 	// Only add movement if there is a controller possessing this actor
 	if (Controller != nullptr)
@@ -92,7 +91,6 @@ void AUS_Character::Move(const FInputActionValue& Value)
 void AUS_Character::Look(const FInputActionValue& Value)
 {
 	const auto LookAxisVector = Value.Get<FVector2D>();
-//	GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green, FString::Printf(TEXT("LookAxisVector: %s"), *LookAxisVector.ToString()));
 
 	// Only add look around if there is a controller possessing this actor
 	if (Controller != nullptr)
@@ -161,10 +159,6 @@ void AUS_Character::Interact_Server_Implementation()
 /**************************************** ADD THIS ****************************************/
 void AUS_Character::UpdateCharacterSkin()
 {
-	// Display a message
-GEngine->AddOnScreenDebugMessage(30, 5.f, FColor::Red, FString::Printf(TEXT("UpdateCharacterSkin: %d"), SkinIndex));
-
-	
 	if(CharacterSkinDataTable)
 	{
 		// Get all the rows from the data table
@@ -177,6 +171,7 @@ GEngine->AddOnScreenDebugMessage(30, 5.f, FColor::Red, FString::Printf(TEXT("Upd
 			const auto Index = FMath::Clamp(SkinIndex, 0, CharacterSkinsRows.Num() - 1);
 			CharacterSkin = CharacterSkinsRows[Index];
 
+			// Set the materials
 			GetMesh()->SetMaterial(4, CharacterSkin->Material4);
 			GetMesh()->SetMaterial(0, CharacterSkin->Material0);
 			GetMesh()->SetMaterial(1, CharacterSkin->Material1);
@@ -189,19 +184,17 @@ void AUS_Character::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	// You can ensure the property only replicates when the actor is created by using COND_Initial as the replication condition
 	DOREPLIFETIME(AUS_Character, SkinIndex);
 }
 
 void AUS_Character::OnRep_SkinChanged(int32 OldValue)
 {
-	// Diplay a message
-	GEngine->AddOnScreenDebugMessage(3230, 5.f, FColor::Red, FString::Printf(TEXT("OnRep_SkinChanged: %d"), SkinIndex));
 	UpdateCharacterSkin();
 }
 
-void AUS_Character::SetSkinIndex_Server_Implementation(int32 Value)
+void AUS_Character::SetSkinIndex_Server_Implementation(const int32 Value)
 {
+	// Called from the server, ensures that the property is replicated
 	SkinIndex = Value;
 	UpdateCharacterSkin();
 }
@@ -276,20 +269,13 @@ void AUS_Character::BeginPlay()
 	
 	/**************************************** ADD THIS ****************************************/
 	
-//	const auto PlayerStateCast = Cast<AUS_PlayerState>(GetPlayerState());
-//	if(PlayerStateCast == nullptr) return;
-
-	// Display a message
 	if(IsLocallyControlled())
-//	if(GetLocalRole() == ROLE_SimulatedProxy)
 	{
 		if(const auto GameInstanceCast = Cast<UUS_GameInstance>(GetWorld()->GetGameInstance()); GameInstanceCast != nullptr)
 		{
 			SetSkinIndex_Server(GameInstanceCast->SkinIndex);
-//			SkinIndex = GameInstanceCast->SkinIndex;
 		}
 	}
-//	UpdateCharacterSkin();
 	/****************************************************************************************/
 }
 
@@ -335,7 +321,6 @@ void AUS_Character::UpdateCharacterStats(int32 CharacterLevel)
 			{
 				SprintStart_Server();
 			}
-			// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Level Up: %d"), NewCharacterLevel));
 		}
 	}
 }

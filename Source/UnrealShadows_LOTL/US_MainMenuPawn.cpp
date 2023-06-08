@@ -60,9 +60,7 @@ void AUS_MainMenuPawn::RandomizeCharacterSkin()
 		// Get the row from the data table
 		if(CharacterSkinsRows.Num() > 0)
 		{
-			// TODO: TEMP
-//			const auto NewIndex = FMath::RandRange(0, CharacterSkinsRows.Num() - 1);
-			const auto NewIndex = FMath::RandRange(1, CharacterSkinsRows.Num() - 1);
+			const auto NewIndex = FMath::RandRange(0, CharacterSkinsRows.Num() - 1);
 			CharacterSkin = CharacterSkinsRows [NewIndex];
 
 			Mesh->SetMaterial(4, CharacterSkinsRows[NewIndex]->Material4);

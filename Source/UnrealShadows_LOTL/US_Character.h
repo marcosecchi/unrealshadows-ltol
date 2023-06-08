@@ -114,18 +114,21 @@ protected:
 	void Interact_Server();
 
 	/************************************* ADD THIS *************************************/
+	// The index used to get the character skin from the data table
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, ReplicatedUsing="OnRep_SkinChanged", Category = "Skin")
 	int32 SkinIndex = 0;
 
-	UFUNCTION(Server, Reliable)
-	void SetSkinIndex_Server(int32 Value);
-
+	// The function called when the character changes skin index
 	UFUNCTION()
 	void OnRep_SkinChanged(int32 OldValue);
 
+	// The function called on the server when the character changes skin
+	UFUNCTION(Server, Reliable)
+	void SetSkinIndex_Server(int32 Value);
+
+	// Updates the character skin
 	UFUNCTION()
 	void UpdateCharacterSkin();
-
 	/************************************* END *************************************/
 
 public:	
