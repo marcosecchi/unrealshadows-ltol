@@ -117,6 +117,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, ReplicatedUsing="OnRep_SkinChanged", Category = "Skin")
 	int32 SkinIndex = 0;
 
+	UFUNCTION(Server, Reliable)
+	void SetSkinIndex_Server(int32 Value);
+
 	UFUNCTION()
 	void OnRep_SkinChanged(int32 OldValue);
 

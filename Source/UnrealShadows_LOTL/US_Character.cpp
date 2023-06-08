@@ -189,11 +189,20 @@ void AUS_Character::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLif
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	// You can ensure the property only replicates when the actor is created by using COND_Initial as the replication condition
 	DOREPLIFETIME(AUS_Character, SkinIndex);
 }
 
 void AUS_Character::OnRep_SkinChanged(int32 OldValue)
 {
+	// Diplay a message
+	GEngine->AddOnScreenDebugMessage(3230, 5.f, FColor::Red, FString::Printf(TEXT("OnRep_SkinChanged: %d"), SkinIndex));
+	UpdateCharacterSkin();
+}
+
+void AUS_Character::SetSkinIndex_Server_Implementation(int32 Value)
+{
+	SkinIndex = Value;
 	UpdateCharacterSkin();
 }
 
@@ -202,8 +211,6 @@ void AUS_Character::OnRep_SkinChanged(int32 OldValue)
 void AUS_Character::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-
-	//GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green, FString::Printf(TEXT("Tick")));
 
 	if(GetLocalRole() != ROLE_Authority) return;
 	
@@ -274,13 +281,15 @@ void AUS_Character::BeginPlay()
 
 	// Display a message
 	if(IsLocallyControlled())
+//	if(GetLocalRole() == ROLE_SimulatedProxy)
 	{
 		if(const auto GameInstanceCast = Cast<UUS_GameInstance>(GetWorld()->GetGameInstance()); GameInstanceCast != nullptr)
 		{
-			SkinIndex = GameInstanceCast->SkinIndex;
+			SetSkinIndex_Server(GameInstanceCast->SkinIndex);
+//			SkinIndex = GameInstanceCast->SkinIndex;
 		}
 	}
-	UpdateCharacterSkin();
+//	UpdateCharacterSkin();
 	/****************************************************************************************/
 }
 
