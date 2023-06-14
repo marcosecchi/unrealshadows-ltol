@@ -24,5 +24,4 @@ struct UNREALSHADOWS_LOTL_API FUS_CharacterSkins : public FTableRowBase
 	// The decorations material
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UMaterialInterface *Material2;
-
 };
