@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -18,14 +16,16 @@ class UNREALSHADOWS_LOTL_API AUS_MainMenuPawn : public APawn
 	TObjectPtr<class UCameraComponent> Camera;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class USkeletalMeshComponent> Mesh;
+	TObjectPtr<USkeletalMeshComponent> Mesh;
 
+/*+********************************************* ADD THIS LATER *********************************************/
 	/** A reference to the data table containing the character stats. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Data", meta = (AllowPrivateAccess = "true"))
 	class UDataTable* CharacterSkinDataTable;
 
 	/** The character skin, retrieved from the data table. */
 	struct FUS_CharacterSkins* CharacterSkin;
+	/*+********************************************* END *********************************************/
 
 public:
 	// Sets default values for this pawn's properties
@@ -35,15 +35,15 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
+/*+********************************************* ADD THIS LATER *********************************************/
 	void RandomizeCharacterSkin();
-
-	// Getters for the camera components
-	
-	FORCEINLINE UArrowComponent* GetArrow() const { return Arrow; }
-	FORCEINLINE UCameraComponent* GetCamera() const { return Camera; }
-	FORCEINLINE USkeletalMeshComponent* GetMesh() const { return Mesh; }
 
 	// Getter for the character skins
 	FORCEINLINE FUS_CharacterSkins* GetCharacterSkins() const { return CharacterSkin; }
+	/*+********************************************* END *********************************************/
 
+	// Getters for the private components
+	FORCEINLINE UArrowComponent* GetArrow() const { return Arrow; }
+	FORCEINLINE UCameraComponent* GetCamera() const { return Camera; }
+	FORCEINLINE USkeletalMeshComponent* GetMesh() const { return Mesh; }
 };

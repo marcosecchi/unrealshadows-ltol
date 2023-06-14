@@ -1,14 +1,12 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "US_MainMenuPawn.h"
 
-#include "US_CharacterSkins.h"
-#include "US_GameInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/ArrowComponent.h"
+/*+********************************************* ADD THIS LATER *********************************************/
+#include "US_CharacterSkins.h"
+#include "US_GameInstance.h"
+/********************************************* END *********************************************/
 
-// Sets default values
 AUS_MainMenuPawn::AUS_MainMenuPawn()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -29,13 +27,6 @@ AUS_MainMenuPawn::AUS_MainMenuPawn()
 	{
 		Mesh->SetSkeletalMesh(SkeletalMeshAsset.Object);
 	}
-	Mesh->SetAnimationMode(EAnimationMode::AnimationSingleNode);
-//	static ConstructorHelpers::FObjectFinder<UAnimationAsset> AnimationAsset(TEXT("/Game/KayKit/Characters/RogueAnimation/rogue_Idle.rogue_Idle"));
-//	if (AnimationAsset.Succeeded())
-//	{
-//		Mesh->SetAnimation(AnimationAsset.Object);
-//	}
-	// TODO: Assign Animation
 }
 
 // Called when the game starts or when spawned
@@ -43,12 +34,15 @@ void AUS_MainMenuPawn::BeginPlay()
 {
 	Super::BeginPlay();
 
+/*+********************************************* ADD THIS LATER *********************************************/
 	if(IsLocallyControlled())
 	{
 		RandomizeCharacterSkin();
 	}
+/********************************************* END *********************************************/
 }
 
+/*+********************************************* ADD THIS LATER *********************************************/
 void AUS_MainMenuPawn::RandomizeCharacterSkin()
 {
 	if(CharacterSkinDataTable)
@@ -75,6 +69,7 @@ void AUS_MainMenuPawn::RandomizeCharacterSkin()
 			}
 		}
 	}
+	/********************************************* END *********************************************/
 
 }
 

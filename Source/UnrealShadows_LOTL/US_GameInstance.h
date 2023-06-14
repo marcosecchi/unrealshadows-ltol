@@ -9,11 +9,8 @@ class UNREALSHADOWS_LOTL_API UUS_GameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 
-	/********************************************* ADD THIS *********************************************/
 public:
-	// the player name
+	// The character skin index, retrievable from a data table.
 	UPROPERTY(BlueprintReadWrite)
 	int32 SkinIndex;
-	
-	/********************************************* END *********************************************/	
 };

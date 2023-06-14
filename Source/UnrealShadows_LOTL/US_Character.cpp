@@ -16,7 +16,6 @@
 
 #include "Engine/DataTable.h"
 #include "US_Interactable.h"
-#include "US_PlayerState.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Components/PawnNoiseEmitterComponent.h"
 #include "US_WeaponProjectileComponent.h"
