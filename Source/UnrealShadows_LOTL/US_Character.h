@@ -61,15 +61,6 @@ class UNREALSHADOWS_LOTL_API AUS_Character : public ACharacter
 	UPROPERTY()
 	AActor* InteractableActor;
 
-	/******************************** ADD THIS ********************************/
-	/** A reference to the data table containing the character stats. */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Data", meta = (AllowPrivateAccess = "true"))
-	UDataTable* CharacterSkinDataTable;
-
-	/** The character skin, retrieved from the data table. */
-	struct FUS_CharacterSkins* CharacterSkin;
-	/*************************************************************************/
-	
 public:
 	AUS_Character();
 
@@ -113,24 +104,6 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void Interact_Server();
 
-	/************************************* ADD THIS *************************************/
-	// The index used to get the character skin from the data table
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, ReplicatedUsing="OnRep_SkinChanged", Category = "Skin")
-	int32 SkinIndex = 0;
-
-	// The function called when the character changes skin index
-	UFUNCTION()
-	void OnRep_SkinChanged(int32 OldValue);
-
-	// The function called on the server when the character changes skin
-	UFUNCTION(Server, Reliable)
-	void SetSkinIndex_Server(int32 Value);
-
-	// Updates the character skin
-	UFUNCTION()
-	void UpdateCharacterSkin();
-	/************************************* END *************************************/
-
 public:	
 	virtual void Tick(float DeltaSeconds) override;
 
@@ -152,12 +125,4 @@ public:
 
 	// Getter for the weapon component
 	FORCEINLINE UUS_WeaponProjectileComponent* GetWeapon() const { return Weapon; }
-
-	/******************************* ADD THIS ********************************/
-	// Getter for the character skins
-	FORCEINLINE FUS_CharacterSkins* GetCharacterSkins() const { return CharacterSkin; }
-
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-	/************************************************************************/
 };
