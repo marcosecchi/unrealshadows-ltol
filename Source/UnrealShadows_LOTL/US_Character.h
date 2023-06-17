@@ -29,19 +29,25 @@ class UNREALSHADOWS_LOTL_API AUS_Character : public ACharacter
 
 	/** The input action for moving the character. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	class UInputAction* MoveAction;
+	TObjectPtr<class UInputMappingContext> DefaultMappingContext;
+
+	// Declare the basic input actions (movement, interaction, etc.)
+
+	/** The input action for moving the character. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UInputAction> MoveAction;
 
 	/** The input action for looking around with the character. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	UInputAction* LookAction;
+	TObjectPtr<UInputAction> LookAction;
 
 	/** The input action for sprinting with the character. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	UInputAction* SprintAction;
+	TObjectPtr<UInputAction> SprintAction;
 
 	/** The input action for interacting with the environment. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	UInputAction* InteractAction;
+	TObjectPtr<UInputAction> InteractAction;
 
 	/** A reference to the data table containing the character stats. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Data", meta = (AllowPrivateAccess = "true"))
