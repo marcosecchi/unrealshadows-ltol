@@ -83,14 +83,14 @@ void AUS_Character::Look(const FInputActionValue& Value)
 // Handle the change of speed when the sprint button is pressed
 void AUS_Character::SprintStart(const FInputActionValue& Value)
 {
-//	GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Blue, TEXT("SprintStart"));
+	GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Blue, TEXT("SprintStart"));
 	GetCharacterMovement()->MaxWalkSpeed = 3000.f;
 }
 
 // Handle the change of speed when the sprint button is released
 void AUS_Character::SprintEnd(const FInputActionValue& Value)
 {
-//	GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Blue, TEXT("SprintEnd"));
+	GEngine->AddOnScreenDebugMessage(2, 5.f, FColor::Blue, TEXT("SprintEnd"));
 	GetCharacterMovement()->MaxWalkSpeed = 500.f;
 }
 
