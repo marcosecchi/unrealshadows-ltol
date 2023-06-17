@@ -19,12 +19,6 @@ class UNREALSHADOWS_LOTL_API AUS_Character : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UCameraComponent> FollowCamera;
 
-	// Declare the input mapping context for the basic actions (movement, interaction, etc.)
-
-	/** The default input mapping context for the character: handles movement, look around and interaction. */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	class UInputMappingContext* DefaultMappingContext;
-
 	// Declare the basic input actions (movement, interaction, etc.)
 
 	/** The input action for moving the character. */
