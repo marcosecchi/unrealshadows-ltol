@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "US_PlayerState.h"
 #include "GameFramework/Character.h"
 #include "US_Character.generated.h"
 
@@ -23,26 +24,33 @@ class UNREALSHADOWS_LOTL_API AUS_Character : public ACharacter
 
 	/** The default input mapping context for the character: handles movement, look around and interaction. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputMappingContext> DefaultMappingContext;
+	class UInputMappingContext* DefaultMappingContext;
 
 	// Declare the basic input actions (movement, interaction, etc.)
 
 	/** The input action for moving the character. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> MoveAction;
+	class UInputAction* MoveAction;
 
 	/** The input action for looking around with the character. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> LookAction;
+	UInputAction* LookAction;
 
 	/** The input action for sprinting with the character. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> SprintAction;
+	UInputAction* SprintAction;
 
 	/** The input action for interacting with the environment. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> InteractAction;
+	UInputAction* InteractAction;
 
+	/** A reference to the data table containing the character stats. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Data", meta = (AllowPrivateAccess = "true"))
+	class UDataTable* CharacterDataTable;
+
+	/** The character stats, retrieved from the data table. */
+	struct FUS_CharacterStats* CharacterStats;
+	
 public:
 	AUS_Character();
 
@@ -62,12 +70,17 @@ protected:
 
 	/** The function called when the character stops sprinting. */
 	void SprintEnd(const FInputActionValue& Value);
-
+	
 	/** The function called when the character interacts with the environment. */
 	void Interact(const FInputActionValue& Value);
 
 public:	
+	virtual void Tick(float DeltaSeconds) override;
+
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+
+	/** Updates the character stats based on the level. */
+	void UpdateCharacterStats(int32 CharacterLevel);
 
 	// Getters for the camera components
 	
@@ -77,4 +90,6 @@ public:
 	/** Returns the CameraComponent used as a main camera for the character. */
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	// Getter for the character statistics based on the level
+	FORCEINLINE FUS_CharacterStats* GetCharacterStats() const { return CharacterStats; }
 };
