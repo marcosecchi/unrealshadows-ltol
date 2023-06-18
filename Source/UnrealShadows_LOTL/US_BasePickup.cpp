@@ -27,15 +27,11 @@ void AUS_BasePickup::BeginPlay()
 
 // Handles the Character overlapping the pickup.
 void AUS_BasePickup::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-                                    UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+									UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor->IsA(AUS_Character::StaticClass()))
+	if (const auto Character = Cast<AUS_Character>(OtherActor))
 	{
-		const auto Character = Cast<AUS_Character>(OtherActor);
-		if (Character)
-		{
-			Pickup(Character);
-		}
+		Pickup(Character);
 	}
 }
 
