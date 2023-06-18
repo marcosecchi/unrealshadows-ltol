@@ -42,18 +42,39 @@ void UUS_WeaponProjectileComponent:: Throw_Server_Implementation()
 	// Spawn the projectile, setting its owner and instigator as the spawning character
 	if (ProjectileClass)
 	{
-		const auto Character = Cast<AUS_Character>(GetOwner());
-		const auto ProjectileSpawnLocation = GetComponentLocation();
-		const auto ProjectileSpawnRotation = GetComponentRotation();
-		auto ProjectileSpawnParams = FActorSpawnParameters();
-		ProjectileSpawnParams.Owner = GetOwner();
-		ProjectileSpawnParams.Instigator = Character;
+		// Call the client side method to play the animation
+		Throw_Client();
+		// Delay the spawn of the projectile to match the animation
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [&]()
+		{
+			const auto Character = Cast<AUS_Character>(GetOwner());
+			const auto ProjectileSpawnLocation = GetComponentLocation();
+			const auto ProjectileSpawnRotation = GetComponentRotation();
+			auto ProjectileSpawnParams = FActorSpawnParameters();
+			ProjectileSpawnParams.Owner = GetOwner();
+			ProjectileSpawnParams.Instigator = Character;
 
-		GetWorld()->SpawnActor<AUS_BaseWeaponProjectile>(ProjectileClass, ProjectileSpawnLocation, ProjectileSpawnRotation, ProjectileSpawnParams);
+			GetWorld()->SpawnActor<AUS_BaseWeaponProjectile>(ProjectileClass, ProjectileSpawnLocation, ProjectileSpawnRotation, ProjectileSpawnParams);
+		}, .4f, false);
 	}
+}
+
+void  UUS_WeaponProjectileComponent::Throw_Client_Implementation()
+{
+	// Play the animation on the client side
+	const auto Character = Cast<AUS_Character>(GetOwner());
+	if (ThrowAnimation != nullptr)
+	{
+		if (const auto AnimInstance = Character->GetMesh()->GetAnimInstance(); AnimInstance != nullptr)
+		{
+			AnimInstance->Montage_Play(ThrowAnimation, 1.f);
+		}
+	}	
 }
 
 void UUS_WeaponProjectileComponent::SetProjectileClass(TSubclassOf<AUS_BaseWeaponProjectile> NewProjectileClass)
 {
+	// Assign the new projectile class
 	ProjectileClass = NewProjectileClass;
 }

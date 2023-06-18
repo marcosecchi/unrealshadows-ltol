@@ -33,6 +33,8 @@ protected:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Pickup", meta=(DisplayName="Pickup"))
 	void Pickup(class AUS_Character* OwningCharacter);
 
+	void Pickup_Implementation(AUS_Character* OwningCharacter);
+
 public:	
 
 	/** Returns the BoxCollision used as a trigger for the character. */

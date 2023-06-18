@@ -36,11 +36,12 @@ AUS_Character::AUS_Character()
 	Weapon = CreateDefaultSubobject<UUS_WeaponProjectileComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(RootComponent);
 	Weapon->SetRelativeLocation(FVector(120.f, 70.f, 0.f));
-	
+	Weapon->SetIsReplicated(true);
+
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
-
+	
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(60.f, 96.0f);
 
@@ -109,14 +110,26 @@ void AUS_Character::SprintEnd(const FInputActionValue& Value)
 // Executes the sprint start action from the server
 void AUS_Character::SprintStart_Server_Implementation()
 {
+	SprintStart_Client();
+}
+
+// Executes the sprint end action from the server
+void AUS_Character::SprintEnd_Server_Implementation()
+{
+	SprintEnd_Client();
+}
+
+// Executes the sprint start action from the client
+void AUS_Character::SprintStart_Client_Implementation()
+{
 	if (GetCharacterStats())
 	{
 		GetCharacterMovement()->MaxWalkSpeed = GetCharacterStats()->SprintSpeed;
 	}
 }
 
-// Executes the sprint end action from the server
-void AUS_Character::SprintEnd_Server_Implementation()
+// Executes the sprint end action from the client
+void AUS_Character::SprintEnd_Client_Implementation()
 {
 	if (GetCharacterStats())
 	{
@@ -149,7 +162,6 @@ void AUS_Character::Tick(float DeltaSeconds)
 	FHitResult HitResult;
 	FCollisionQueryParams QueryParams;
 	QueryParams.bTraceComplex = true;
-	QueryParams.AddIgnoredActor(this);
 
 	auto SphereRadius = 50.f;
 	auto StartLocation = GetActorLocation() + GetActorForwardVector() * 150.f;

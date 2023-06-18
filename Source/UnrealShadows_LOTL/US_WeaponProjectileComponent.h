@@ -17,11 +17,14 @@ class UNREALSHADOWS_LOTL_API UUS_WeaponProjectileComponent : public USceneCompon
 
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input", meta=(AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputMappingContext> WeaponMappingContext;
+	class UInputMappingContext* WeaponMappingContext;
 
 	/** Fire Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input", meta=(AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> ThrowAction;
+	class UInputAction* ThrowAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Projectile", meta=(AllowPrivateAccess = "true"))
+	UAnimMontage* ThrowAnimation;
 
 public:	
 	// Sets default values for this component's properties
@@ -41,5 +44,8 @@ protected:
 	// Throw the projectile on the server
 	UFUNCTION(Server, Reliable)
 	void Throw_Server();
-	
+
+	// Call the throw projectile logic from the client
+	UFUNCTION(NetMulticast, Unreliable)
+	void Throw_Client();
 };
