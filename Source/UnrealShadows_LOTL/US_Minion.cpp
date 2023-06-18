@@ -117,6 +117,6 @@ void AUS_Minion::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	this->OnActorBeginOverlap.AddDynamic(this, &AUS_Minion::OnBeginOverlap);
+	OnActorBeginOverlap.AddDynamic(this, &AUS_Minion::OnBeginOverlap);
 	GetPawnSense()->OnSeePawn.AddDynamic(this, &AUS_Minion::OnPawnDetected);
 }
