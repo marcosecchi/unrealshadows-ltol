@@ -19,29 +19,37 @@ class UNREALSHADOWS_LOTL_API AUS_Character : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UCameraComponent> FollowCamera;
 
+	// Other components declaration
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stealth", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UPawnNoiseEmitterComponent> NoiseEmitter;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UUS_WeaponProjectileComponent> Weapon;
+	
 	// Declare the input mapping context for the basic actions (movement, interaction, etc.)
 
 	/** The default input mapping context for the character: handles movement, look around and interaction. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputMappingContext> DefaultMappingContext;
+	class UInputMappingContext* DefaultMappingContext;
 
 	// Declare the basic input actions (movement, interaction, etc.)
 
 	/** The input action for moving the character. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> MoveAction;
+	class UInputAction* MoveAction;
 
 	/** The input action for looking around with the character. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> LookAction;
+	UInputAction* LookAction;
 
 	/** The input action for sprinting with the character. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> SprintAction;
+	UInputAction* SprintAction;
 
 	/** The input action for interacting with the environment. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> InteractAction;
+	UInputAction* InteractAction;
 
 	/** A reference to the data table containing the character stats. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character Data", meta = (AllowPrivateAccess = "true"))
@@ -106,4 +114,7 @@ public:
 
 	// Getter for the character statistics based on the level
 	FORCEINLINE FUS_CharacterStats* GetCharacterStats() const { return CharacterStats; }
+
+	// Getter for the weapon component
+	FORCEINLINE UUS_WeaponProjectileComponent* GetWeapon() const { return Weapon; }
 };
