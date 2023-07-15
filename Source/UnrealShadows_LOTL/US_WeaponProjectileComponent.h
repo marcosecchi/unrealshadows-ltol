@@ -17,11 +17,11 @@ class UNREALSHADOWS_LOTL_API UUS_WeaponProjectileComponent : public USceneCompon
 
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input", meta=(AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputMappingContext> WeaponMappingContext;
+	class UInputMappingContext* WeaponMappingContext;
 
 	/** Fire Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input", meta=(AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputAction> ThrowAction;
+	class UInputAction* ThrowAction;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Projectile", meta=(AllowPrivateAccess = "true"))
 	UAnimMontage* ThrowAnimation;

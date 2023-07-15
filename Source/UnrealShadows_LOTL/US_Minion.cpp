@@ -68,8 +68,6 @@ void AUS_Minion::BeginPlay()
 
 void AUS_Minion::SetNextPatrolLocation()
 {
-	if(GetLocalRole() != ROLE_Authority) return;
-
 	GetCharacterMovement()->MaxWalkSpeed = PatrolSpeed;
 
 	const auto LocationFound = UNavigationSystemV1::K2_GetRandomReachablePointInRadius(
@@ -82,8 +80,6 @@ void AUS_Minion::SetNextPatrolLocation()
 
 void AUS_Minion::Chase(APawn* Pawn)
 {
-	if(GetLocalRole() != ROLE_Authority) return;
-
 	GetCharacterMovement()->MaxWalkSpeed = ChaseSpeed;
 	// Set the AI character's destination to the player's location
 	UAIBlueprintHelperLibrary::SimpleMoveToActor(GetController(), Pawn);
@@ -151,8 +147,6 @@ void AUS_Minion::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if(GetLocalRole() != ROLE_Authority) return;
-
 	if(GetMovementComponent()->GetMaxSpeed() == ChaseSpeed) return;
 
 	if((GetActorLocation() - PatrolLocation).Size() < 500.f)
@@ -165,10 +159,8 @@ void AUS_Minion::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	if(GetLocalRole() != ROLE_Authority) return;
-
-	OnTakeAnyDamage.AddDynamic(this, &AUS_Minion::OnDamage);
-	OnActorBeginOverlap.AddDynamic(this, &AUS_Minion::OnBeginOverlap);
+	this->OnTakeAnyDamage.AddDynamic(this, &AUS_Minion::OnDamage);
+	this->OnActorBeginOverlap.AddDynamic(this, &AUS_Minion::OnBeginOverlap);
 	GetPawnSense()->OnSeePawn.AddDynamic(this, &AUS_Minion::OnPawnDetected);
 	GetPawnSense()->OnHearNoise.AddDynamic(this, &AUS_Minion::OnHearNoise);
 }

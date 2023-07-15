@@ -1,6 +1,7 @@
 
 #include "US_GameMode.h"
 
+#include "US_CustomLogs.h"
 #include "US_GameState.h"
 #include "US_PlayerController.h"
 #include "US_PlayerState.h"
@@ -27,6 +28,8 @@ void AUS_GameMode::AlertMinions(AActor* AlertInstigator, const FVector& Location
 	TArray<AActor*> Minions;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AUS_Minion::StaticClass(), Minions);
 
+	UE_LOG(LogUnrealShadows, Display, TEXT("Alerting Minions"));
+		
 	// Loop through all minions
 	for (const auto Minion : Minions)
 	{

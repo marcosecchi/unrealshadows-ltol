@@ -57,7 +57,7 @@ void AUS_BaseWeaponProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* 
 	if (OtherActor && OtherActor != this)
 	{
 		const FDamageEvent Event(UDamageType::StaticClass());
-		OtherActor->TakeDamage(ComputedDamage, Event, GetInstigatorController(), this);
+		OtherActor->TakeDamage(ComputedDamage, Event, this->GetInstigatorController(), this);
 	}
 	Destroy();
 }
