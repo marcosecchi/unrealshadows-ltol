@@ -159,7 +159,8 @@ void AUS_Character::Tick(float DeltaSeconds)
 	FHitResult HitResult;
 	FCollisionQueryParams QueryParams;
 	QueryParams.bTraceComplex = true;
-
+	QueryParams.AddIgnoredActor(this);
+	
 	auto SphereRadius = 50.f;
 	auto StartLocation = GetActorLocation() + GetActorForwardVector() * 150.f;
 	auto EndLocation = StartLocation + GetActorForwardVector() * 500.f;
