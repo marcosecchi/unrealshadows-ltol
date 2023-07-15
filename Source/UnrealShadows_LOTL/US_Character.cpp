@@ -8,7 +8,9 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "US_CharacterStats.h"
-
+#include "US_GameInstance.h"
+#include "US_CharacterSkins.h"
+#include "Net/UnrealNetwork.h"
 #include "Engine/DataTable.h"
 #include "US_Interactable.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -150,6 +152,48 @@ void AUS_Character::Interact_Server_Implementation()
 	}
 }
 
+void AUS_Character::UpdateCharacterSkin()
+{
+	if(CharacterSkinDataTable)
+	{
+		// Get all the rows from the data table
+		TArray<FUS_CharacterSkins*> CharacterSkinsRows;
+		CharacterSkinDataTable->GetAllRows<FUS_CharacterSkins>(TEXT("US_Character"), CharacterSkinsRows);
+
+		// Get the row from the data table
+		if(CharacterSkinsRows.Num() > 0)
+		{
+			const auto Index = FMath::Clamp(SkinIndex, 0, CharacterSkinsRows.Num() - 1);
+			CharacterSkin = CharacterSkinsRows[Index];
+
+			// Set the materials
+			GetMesh()->SetMaterial(4, CharacterSkin->Material4);
+			GetMesh()->SetMaterial(0, CharacterSkin->Material0);
+			GetMesh()->SetMaterial(1, CharacterSkin->Material1);
+			GetMesh()->SetMaterial(2, CharacterSkin->Material2);
+		}
+	}
+}
+
+void AUS_Character::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AUS_Character, SkinIndex);
+}
+
+void AUS_Character::OnRep_SkinChanged(int32 OldValue)
+{
+	UpdateCharacterSkin();
+}
+
+void AUS_Character::SetSkinIndex_Server_Implementation(const int32 Value)
+{
+	// Called from the server, ensures that the property is replicated
+	SkinIndex = Value;
+	UpdateCharacterSkin();
+}
+
 void AUS_Character::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
@@ -159,8 +203,7 @@ void AUS_Character::Tick(float DeltaSeconds)
 	FHitResult HitResult;
 	FCollisionQueryParams QueryParams;
 	QueryParams.bTraceComplex = true;
-	QueryParams.AddIgnoredActor(this);
-	
+
 	auto SphereRadius = 50.f;
 	auto StartLocation = GetActorLocation() + GetActorForwardVector() * 150.f;
 	auto EndLocation = StartLocation + GetActorForwardVector() * 500.f;
@@ -216,6 +259,14 @@ void AUS_Character::BeginPlay()
 	}
 
 	UpdateCharacterStats(1);
+	
+	if(IsLocallyControlled())
+	{
+		if(const auto GameInstanceCast = Cast<UUS_GameInstance>(GetWorld()->GetGameInstance()); GameInstanceCast != nullptr)
+		{
+			SetSkinIndex_Server(GameInstanceCast->SkinIndex);
+		}
+	}
 }
 
 // Called to bind functionality to input

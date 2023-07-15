@@ -14,8 +14,8 @@ void AUS_PlayerState::AddXp(const int32 Value)
 		if(Character->GetCharacterStats()->NextLevelXp < Xp)
 		{
 			CharacterLevel++;
-			Character->UpdateCharacterStats(CharacterLevel);
 			OnCharacterLevelUp.Broadcast(CharacterLevel);
+			Character->UpdateCharacterStats(CharacterLevel);
 		}
 	}
 }
