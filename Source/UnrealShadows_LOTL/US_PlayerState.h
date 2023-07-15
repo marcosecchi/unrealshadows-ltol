@@ -23,7 +23,7 @@ protected:
 	/** The experience points gained so far by the player. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, ReplicatedUsing="OnRep_CharacterLevelUp", Category = "Experience")
 	int CharacterLevel = 1;
-
+	
 	// Called whenever an Xp replication occurs
 	UFUNCTION()
 	void OnRep_Xp(int32 OldValue) const;
@@ -45,6 +45,6 @@ public:
 	// Used to broadcast the character level up event
 	UPROPERTY(BlueprintAssignable, Category = "Events")
 	FOnCharacterLevelUp OnCharacterLevelUp;
-
+	
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 };

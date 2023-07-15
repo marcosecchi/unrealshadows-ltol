@@ -8,6 +8,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "US_CharacterStats.h"
+
 #include "Engine/DataTable.h"
 #include "US_Interactable.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -65,7 +66,6 @@ AUS_Character::AUS_Character()
 void AUS_Character::Move(const FInputActionValue& Value)
 {
 	const auto MovementVector = Value.Get<FVector2D>();
-//	GEngine->AddOnScreenDebugMessage(0, 5.f, FColor::Yellow, FString::Printf(TEXT("MovementVector: %s"), *MovementVector.ToString()));
 
 	// Only add movement if there is a controller possessing this actor
 	if (Controller != nullptr)
@@ -85,7 +85,6 @@ void AUS_Character::Move(const FInputActionValue& Value)
 void AUS_Character::Look(const FInputActionValue& Value)
 {
 	const auto LookAxisVector = Value.Get<FVector2D>();
-//	GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green, FString::Printf(TEXT("LookAxisVector: %s"), *LookAxisVector.ToString()));
 
 	// Only add look around if there is a controller possessing this actor
 	if (Controller != nullptr)
@@ -155,15 +154,12 @@ void AUS_Character::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	//GEngine->AddOnScreenDebugMessage(1, 5.f, FColor::Green, FString::Printf(TEXT("Tick")));
-
 	if(GetLocalRole() != ROLE_Authority) return;
 	
 	FHitResult HitResult;
 	FCollisionQueryParams QueryParams;
 	QueryParams.bTraceComplex = true;
-	QueryParams.AddIgnoredActor(this);
-	
+
 	auto SphereRadius = 50.f;
 	auto StartLocation = GetActorLocation() + GetActorForwardVector() * 150.f;
 	auto EndLocation = StartLocation + GetActorForwardVector() * 500.f;
@@ -263,7 +259,6 @@ void AUS_Character::UpdateCharacterStats(int32 CharacterLevel)
 			{
 				SprintStart_Server();
 			}
-			// GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Level Up: %d"), NewCharacterLevel));
 		}
 	}
 }
