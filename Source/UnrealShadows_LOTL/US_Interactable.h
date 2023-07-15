@@ -19,5 +19,5 @@ public:
 	void Interact(class AUS_Character* CharacterInstigator);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, BlueprintPure, Category = "Interaction", meta=(DisplayName="Can Interact"))
-	bool CanInteract(ACharacter* CharacterInstigator) const;
+	bool CanInteract(AUS_Character* CharacterInstigator) const;
 };
