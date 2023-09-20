@@ -6,7 +6,7 @@ This is the source code for the book [Multiplayer Game Development With Unreal E
 
 ![Book cover](https://github.com/marcosecchi/unrealshadows-ltol/blob/project-master/book_cover.png)
 
-_Note: the original source code for the book can be found on [Packt GitHub repository](https://github.com/PacktPublishing/Multiplayer-Game-Development-with-Unreal-Engine-5).
+**Note**: the original source code for the book can be found on [Packt GitHub repository](https://github.com/PacktPublishing/Multiplayer-Game-Development-with-Unreal-Engine-5).
 
 ## Credits
 
