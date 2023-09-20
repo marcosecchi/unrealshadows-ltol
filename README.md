@@ -2,7 +2,7 @@
 
 ## A Multiplayer game for the Unreal Engine 5
 
-This is the source code for the book _Multiplayer Game Development With Unreal Engine 5_ published by Packt.
+This is the source code for the book [Multiplayer Game Development With Unreal Engine 5](https://www.amazon.com/Multiplayer-Game-Development-Unreal-Engine-ebook/dp/B0C85W64H2/) published by Packt.
 
 ## Credits
 
