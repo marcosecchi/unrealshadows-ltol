@@ -2,7 +2,7 @@
 
 ## A Multiplayer game for the Unreal Engine 5
 
-<a href="https://www.packtpub.com/product/multiplayer-game-development-with-unreal-engine-5/9781803232874"><img src="[https://static.packt-cdn.com/products/9781803232874/cover/smaller](https://github.com/marcosecchi/unrealshadows-ltol/blob/project-master/book_cover.png)" alt="Multiplayer Game Development with Unreal Engine 5" height="256px" align="right"></a>
+<a href="https://www.packtpub.com/product/multiplayer-game-development-with-unreal-engine-5/9781803232874"><img src="https://github.com/marcosecchi/unrealshadows-ltol/blob/project-master/book_cover.png" alt="Multiplayer Game Development with Unreal Engine 5" height="256px" align="right"></a>
 
 This project is based on the source code for my book [Multiplayer Game Development With Unreal Engine 5](https://www.amazon.com/Multiplayer-Game-Development-Unreal-Engine-ebook/dp/B0C85W64H2/) published by Packt.
 It's an ongoing project adding more features to the original source code and keeping it up-to-date with the newer Unreal Engine versions.
